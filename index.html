@@ -1,44 +1,48 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>GSCF by PhenotypeFoundation</title>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="GSCF : Generic Study Capture Framework" />
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <title>GSCF</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>GSCF</h1>
-        <p>Generic Study Capture Framework</p>
-        <p class="view"><a href="https://github.com/PhenotypeFoundation/GSCF">View the Project on GitHub <small>PhenotypeFoundation/GSCF</small></a></p>
-        <ul>
-          <li><a href="https://github.com/PhenotypeFoundation/GSCF/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/PhenotypeFoundation/GSCF/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/PhenotypeFoundation/GSCF">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/PhenotypeFoundation/GSCF">View on GitHub</a>
+
+          <h1 id="project_title">GSCF</h1>
+          <h2 id="project_tagline">Generic Study Capture Framework</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/PhenotypeFoundation/GSCF/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/PhenotypeFoundation/GSCF/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <h3>Welcome to Generic Study Capture Framework</h3>
 
 <p>GSCF is the central module in the Phenotype Database software suite. It is a web application, written in Grails, that hosts study design information for the the studies that are stored in Phenotype Database. Also, it exposes a user interface to create and modify those study designs, to import and export data, and to query and visualize study data.</p>
 
 <h2>Set up a GSCF development environment</h2>
 
-<p>To set up your own development environment, make sure that you have a recent Java Development Kit (JDK, =&gt; 1.6) installed. Also, it depends on Grails 1.3.7, which you can download from <a href="http://grails.org">http://grails.org</a> and just unzip in a target directory. Make sure that JAVA_HOME and GRAILS_HOME environment variables are set to the respective locations, and that their /bin directories are in your path. Finally, it is recommended to declare a decent amount of PermGenSpace (&gt; 150 MB) for your JVM, because both Grails and GSCF heavily use metaprogramming, and you might run out of it with the standard JVM settings.</p>
+<p>To set up your own development environment, make sure that you have a recent Java Development Kit (JDK, =&gt; 1.6) installed. Also, it depends on Grails 1.3.9, which you can download from <a href="http://grails.org">http://grails.org</a> and just unzip in a target directory. Make sure that JAVA_HOME and GRAILS_HOME environment variables are set to the respective locations, and that their /bin directories are in your path. Finally, it is recommended to declare a decent amount of PermGenSpace (&gt; 150 MB) for your JVM, because both Grails and GSCF heavily use metaprogramming, and you might run out of it with the standard JVM settings.</p>
 
 <p>For UNIX, those commands could for example be:</p>
 
 <pre><code>$ export JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Home"
-$ export GRAILS_HOME="/app/grails-1.3.7"
+$ export GRAILS_HOME="/app/grails-1.3.9"
 $ export PATH=$PATH:$JAVA_HOME/bin:$GRAILS_HOME/bin
 $ export JAVA_OPTS="-Xms256m -Xmx512m -XX:MaxPermSize=200m -XX:MaxHeapFreeRatio=70 -XX:MaxGCPauseMillis=10 -XX:+UseConcMarkSweepGC"
 </code></pre>
@@ -63,11 +67,15 @@ $ grails run-app
 <p>See INSTALLATION.md in the project root.</p>
       </section>
     </div>
-    <footer>
-      <p>Project maintained by <a href="https://github.com/PhenotypeFoundation">PhenotypeFoundation</a></p>
-      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
-    </footer>
-    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">GSCF maintained by <a href="https://github.com/PhenotypeFoundation">PhenotypeFoundation</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
@@ -78,6 +86,7 @@ $ grails run-app
             pageTracker._trackPageview();
             } catch(err) {}
           </script>
+
 
   </body>
 </html>
