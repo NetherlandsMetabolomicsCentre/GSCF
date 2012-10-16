@@ -2,15 +2,6 @@
  * @artifact.name@ Web Test
  *
  * Description of my web test
- *
- * @author  your email (+name?)
- * @since	2010mmdd
- * @package	???
- *
- * Revision information:
- * $Rev$
- * $Author$
- * $Date$
  */
 class @webtest.name.caps@Test extends grails.util.WebTest {
 
