@@ -3,17 +3,24 @@
     <meta name="layout" content="main"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'studyView.css')}"/>
     <script type="text/javascript">
+	    var canRead = ${canRead};
+	    var canWrite = ${canWrite};
+
 	    $('document').ready(function () {
 		    // populate all elements
-		    $('div.studyView').each(function () {
-			    var that = this;
+		    $('div#studyView > div.box').each(function () {
+			    var element = $(this);
+			    element.addClass('waitForLoad');
 
 			    // fire ajax call to populate element
 			    $.ajax({
 				    url:"<g:resource/>/studyView/ajax" + this.id.charAt(0).toUpperCase() + this.id.slice(1),
-				    context:document.body
+				    context:document.body,
+				    data: { id: "${study.id}" }
 			    }).done(function (msg) {
-					$(that).html(msg);
+						    element.removeClass('waitForLoad');
+							element.html(msg);
+						    element.animate({ height: element.prop('scrollHeight') }, 500);
 				});
 		    });
 	    });
@@ -21,22 +28,15 @@
 </head>
 <body>
 
-<div id="timeline" class="studyView"></div>
+<div id="studyView">
+	<h1>canRead: ${canRead}, canWrite: ${canWrite}</h1>
 
-<div id="details" class="studyView"></div>
+	<div id="timeline" class="box"></div>
 
-<p>
-    study view / edit / create dashboard page
-</p>
+	<div id="details" class="box"></div>
 
-<p>
-study id: ${studyData.study.id}<br/>
-study title: ${studyData.study.title}<br/>
-owner: ${studyData.study.owner}<br/>
-canRead: ${studyData.canRead}<br/>
-canWrite: ${studyData.canWrite}<br/>
-modified: ${studyData.modified}
-</p>
+	<div id="subjects" class="box"></div>
+</div>
 
 </body>
 </html>

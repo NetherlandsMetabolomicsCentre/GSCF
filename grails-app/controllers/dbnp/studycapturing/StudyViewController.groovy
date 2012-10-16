@@ -7,10 +7,10 @@
 package dbnp.studycapturing
 
 import dbnp.authentication.SecUser
-import org.hibernate.Criteria
 
 class StudyViewController {
 	def authenticationService
+	def studyViewService
 
 	/**
 	 * list the studies where the viewer has access to
@@ -22,72 +22,20 @@ class StudyViewController {
 		render(view: "list", model: [studies: studies])
 	}
 
-	/**
-	 * render dynamic js
-	 */
-	def js = {
-		println params
-	}
-
-	/**
-	 * view, create or modify a study (if applicable)
-	 */
 	def view = {
-		SecUser user = authenticationService.getLoggedInUser()
 		Long id = (params.containsKey('id') && (params.get('id').toLong()) > 0) ? params.get('id').toLong() : 0
-		Study study
-		def criteria = Study.createCriteria()
 
-		// check if we need to create or edit/view a study
-		if (user != null && id > 0) {
-			// is this user an administrator?
-			if (user && user.hasAdminRights()) {
-				study = Study.findById(id)
-			} else if (user) {
-				List studies = criteria.list {
-					and {
-						eq("id", id)
-						and {
-							or {
-								eq("owner", user)
-								writers {
-									eq("id", user.id)
-								}
-								readers {
-									eq("id", user.id)
-								}
-							}
-						}
-					}
-				}
-				study = (studies.size()>0) ? studies.first() : null
-			}
-		} else if (user == null && id > 0) {
-			List studies = criteria.list {
-				and {
-					eq("id", id)
-					eq("publicstudy", true)
-				}
-			}
-			study = (studies.size()>0) ? studies.first() : null
-		} else if (user != null) {
-			// create a new study with this user as owner
-			study = new Study()
-			study.owner = user
-		}
+		SecUser user = authenticationService.getLoggedInUser()
+		Study study = studyViewService.fetchStudyForCurrentUserWithId(id)
 
 		// got a study?
 		if (study) {
-			// story the study instance in the session
-			session.studyData = [
-					study: study,
-					canRead: study.canRead(user),
-					canWrite: study.canWrite(user),
-					modified: (study.id) ? false : true
-					]
-
 			// yes, render the study view page
-			render(view: "view", model: [studyData: session.studyData] )
+			render(view: "view", model: [
+					study   : study,
+					canRead : study.canRead(user),
+					canWrite: study.canWrite(user)
+			])
 		} else {
 			// no user and/or no study. As only users can create
 			// a new study show the 401 page
@@ -96,10 +44,28 @@ class StudyViewController {
 	}
 
 	def ajaxTimeline = {
-		render("timeline")
+		render(view: "common/timeline", model: [studyData: session.studyData])
 	}
 
 	def ajaxDetails = {
-		render("details")
+		Long id = (params.containsKey('id') && (params.get('id').toLong()) > 0) ? params.get('id').toLong() : 0
+		Study study = studyViewService.fetchStudyForCurrentUserWithId(id)
+
+		if (study) {
+			render(view: "common/details", model: [study: study])
+		} else {
+			render(view: "errors/invalid")
+		}
+	}
+
+	def ajaxSubjects = {
+		Long id = (params.containsKey('id') && (params.get('id').toLong()) > 0) ? params.get('id').toLong() : 0
+		Study study = studyViewService.fetchStudyForCurrentUserWithId(id)
+
+		if (study) {
+			render(view: "common/subjects", model: [subjects: study.subjects])
+		} else {
+			render(view: "errors/invalid")
+		}
 	}
 }

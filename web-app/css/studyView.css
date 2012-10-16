@@ -1,0 +1,11 @@
+#studyView .box {
+	width: 960px;
+	height: 20px;
+	border: 1px solid red;
+	margin-bottom: 20px;
+	overflow: hidden;
+}
+
+#studyView .waitForLoad {
+	background: url(../images/ajaxflow/ajax-loader.gif) no-repeat center top;
+}
