@@ -251,16 +251,16 @@ class ExampleStudies {
 		def HFBL1es = new SubjectEventGroup(startTime: 0, subjectGroups: [HFBL1], eventGroups: [HF, BL, S1])
 
 		def LFBV4 = new SubjectGroup(name: "10% fat + vehicle for 4 weeks")
-		def LFBV4es = new SubjectEventGroup(startTime: 0, subjectGroups: [LFBV1], eventGroups: [LF, BV, S4])
+		def LFBV4es = new SubjectEventGroup(startTime: 0, subjectGroups: [LFBV4], eventGroups: [LF, BV, S4])
 
 		def LFBL4 = new SubjectGroup(name: "10% fat + leptin for 4 weeks")
-		def LFBL4es = new SubjectEventGroup(startTime: 0, subjectGroups: [LFBL1], eventGroups: [LF, BL, S4])
+		def LFBL4es = new SubjectEventGroup(startTime: 0, subjectGroups: [LFBL4], eventGroups: [LF, BL, S4])
 
 		def HFBV4 = new SubjectGroup(name: "45% fat + vehicle for 4 weeks")
-		def HFBV4es = new SubjectEventGroup(startTime: 0, subjectGroups: [LFBL1], eventGroups: [HF, BV, S4])
+		def HFBV4es = new SubjectEventGroup(startTime: 0, subjectGroups: [HFBV4], eventGroups: [HF, BV, S4])
 
 		def HFBL4 = new SubjectGroup(name: "45% fat + leptin for 4 weeks")
-		def HFBL4es = new SubjectEventGroup(startTime: 0, subjectGroups: [LFBL1], eventGroups: [HF, BL, S4])
+		def HFBL4es = new SubjectEventGroup(startTime: 0, subjectGroups: [HFBL4], eventGroups: [HF, BL, S4])
 
 		// Add subjects and samples and compose SubjectGroups
 		def x = 1

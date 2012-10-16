@@ -22,4 +22,22 @@ class SubjectGroup extends Identity {
 		name(unique:['parent'])
 	}
 
+	/**
+	 * Calculate all events which occur in this event group
+	 */
+	def giveEvents = {
+		def events = []
+		parent.subjectEventGroups.each {
+			if (this.id in it.subjectGroups.id) {
+				it.eventGroups*.events.each { event ->
+					if (event) events << event
+				}
+				it.eventGroups*.samplingEvents.each { event ->
+					if (event) events << event
+				}
+			}
+		}
+		events
+	}
+
 }
