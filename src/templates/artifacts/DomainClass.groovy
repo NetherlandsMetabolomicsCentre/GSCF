@@ -1,18 +1,23 @@
+//import org.dbnp.gdt.Identity
+//import org.dbnp.gdt.*
+
 /**
  * @artifact.name@ Domain Class
  *
- * Description of my domain class
- *
- * @author  your email (+name?)
- * @since	2010mmdd
- * @package	???
- *
- * Revision information:
- * $Rev$
- * $Author$
- * $Date$
+ * Description
  */
-@artifact.package@class @artifact.name@ {
-    static constraints = {
-    }
+@artifact.package@class @artifact.name@ /** extends Identity / TemplateEntity **/ {
+	// String name
+
+	// static hasMany = [
+	//      subjects: Subject
+	// ]
+
+	// static belongsTo = [
+	//      study: Study
+	// ]
+
+    //static constraints = {
+	//      name(unique: ['parent'])
+    //}
 }

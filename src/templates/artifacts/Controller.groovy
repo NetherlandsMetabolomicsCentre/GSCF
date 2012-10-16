@@ -1,20 +1,13 @@
 /**
- * @artifact.name@ Controler
+ * @artifact.name@
  *
- * Description of my controller
- *
- * @author  your email (+name?)
- * @since	2010mmdd
- * @package	???
- *
- * Revision information:
- * $Rev$
- * $Author$
- * $Date$
+ * Description
  */
 @artifact.package@class @artifact.name@ {
 	/**
 	 * index closure
 	 */
-    def index = { }
+    def index = {
+        // this renders views/@artifact.name@/index.gsp
+    }
 }
