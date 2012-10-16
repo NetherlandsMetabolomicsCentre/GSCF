@@ -16,7 +16,11 @@
 			    $.ajax({
 				    url:"<g:resource/>/studyView/ajax" + this.id.charAt(0).toUpperCase() + this.id.slice(1),
 				    context:document.body,
-				    data: { id: "${study.id}" }
+				    data: {
+					    id: "${study.id}",
+					    info: this.id,
+				        summary: true
+				    }
 			    }).done(function (msg) {
 						    element.removeClass('waitForLoad');
 							element.html(msg);

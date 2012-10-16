@@ -60,4 +60,25 @@ class StudyViewService {
 
 		return study
     }
+
+	def fetchStudy(params) {
+		Long id = (params.containsKey('id') && (params.get('id').toLong()) > 0) ? params.get('id').toLong() : 0
+		return fetchStudyForCurrentUserWithId(id)
+	}
+
+	def wrap(params,Closure block) {
+		try {
+			Long id = (params.containsKey('id') && (params.get('id').toLong()) > 0) ? params.get('id').toLong() : 0
+			Study study = fetchStudyForCurrentUserWithId(id)
+			Boolean summary = (params.containsKey('summary')) ? (params.get('summary') as Boolean) : false
+
+			if (study) {
+				block(study, summary)
+			} else {
+				render(view: "errors/invalid")
+			}
+		} catch (Exception e) {
+			render(view: "errors/exception")
+		}
+	}
 }

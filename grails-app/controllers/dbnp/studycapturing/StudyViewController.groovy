@@ -44,28 +44,21 @@ class StudyViewController {
 	}
 
 	def ajaxTimeline = {
-		render(view: "common/timeline", model: [studyData: session.studyData])
+		println params
+		studyViewService.wrap(params, { study, summary ->
+			render(view: "common/timeline", model: [study: study, summary: summary])
+		})
 	}
 
 	def ajaxDetails = {
-		Long id = (params.containsKey('id') && (params.get('id').toLong()) > 0) ? params.get('id').toLong() : 0
-		Study study = studyViewService.fetchStudyForCurrentUserWithId(id)
-
-		if (study) {
-			render(view: "common/details", model: [study: study])
-		} else {
-			render(view: "errors/invalid")
-		}
+		studyViewService.wrap(params, { study, summary ->
+			render(view: "common/details", model: [study: study, summary: summary])
+		})
 	}
 
 	def ajaxSubjects = {
-		Long id = (params.containsKey('id') && (params.get('id').toLong()) > 0) ? params.get('id').toLong() : 0
-		Study study = studyViewService.fetchStudyForCurrentUserWithId(id)
-
-		if (study) {
+		studyViewService.wrap(params, { study, summary ->
 			render(view: "common/subjects", model: [subjects: study.subjects])
-		} else {
-			render(view: "errors/invalid")
-		}
+		})
 	}
 }
