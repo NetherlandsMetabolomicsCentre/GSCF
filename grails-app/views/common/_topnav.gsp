@@ -4,13 +4,6 @@
     <ul class="topnav">
     <li><g:link controller="home" action="index">Home</g:link></li>
     <sec:ifLoggedIn>
-    <li>
-      <a href="#">Create</a>
-      <ul class="subnav">
-		<li><g:link controller="studyWizard" action="index" params="[jump:'create']">Create a new study</g:link></li>
-		<li><g:link controller="studyWizard" action="index" params="[jump:'edit']">Edit a study</g:link></li>
-	  </ul>
-	</li>
 	<li>
       <a href="#">Import</a>
       <ul class="subnav">
@@ -24,13 +17,7 @@
 	<li>
 		<a href="#">Browse</a>
 	    <ul class="subnav">
-			<sec:ifLoggedIn>
-			<li><g:link controller="study" action="myStudies">My studies</g:link></li>
-			<li><g:link controller="study" action="list">All studies</g:link></li>
-			</sec:ifLoggedIn>
-			<sec:ifNotLoggedIn>
-			<li><g:link controller="study" action="list">View studies</g:link></li>
-			</sec:ifNotLoggedIn>
+            <li><g:link controller="studyView" action="index">*NEW* studies</g:link></li>
             <sec:ifLoggedIn>
             <li><a href="#">Templates</a>
 		    	<ul class="childnav">
@@ -55,7 +42,14 @@
                     </sec:ifLoggedIn>
 				</ul>
 			</li>
-		</ul>
+            <sec:ifLoggedIn>
+                <li><g:link controller="study" action="myStudies">*OLD* My studies</g:link></li>
+                <li><g:link controller="study" action="list">*OLD* All studies</g:link></li>
+            </sec:ifLoggedIn>
+            <sec:ifNotLoggedIn>
+                <li><g:link controller="study" action="list">*OLD* View studies</g:link></li>
+            </sec:ifNotLoggedIn>
+        </ul>
 	</li>
 	<li>
 		<a href="#">Analyze</a>
@@ -87,6 +81,13 @@
 			</ul>
 		</li>	
 	</g:if>
+        <li>
+            <a href="#">*OLD* Create</a>
+            <ul class="subnav">
+                <li><g:link controller="studyWizard" action="index" params="[jump:'create']">*OLD* Create a new study</g:link></li>
+                <li><g:link controller="studyWizard" action="index" params="[jump:'edit']">*OLD* Edit a study</g:link></li>
+            </ul>
+        </li>
     </sec:ifLoggedIn>
 	<sec:ifAllGranted roles="ROLE_ADMIN">
 		<li class="distinct">
