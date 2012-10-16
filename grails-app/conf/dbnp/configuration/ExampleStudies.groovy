@@ -182,47 +182,23 @@ class ExampleStudies {
 
 		def evLF = new Event(
 			startTime	: 3600,
-			endTime		: 3600 + 7 * 24 * 3600,
+			endTime		: 3600 + 4 * 7 * 24 * 3600,
 			template	: dietTreatmentTemplate
 		).setFieldValue('Diet', 'low fat')
 
 		def evHF = new Event(
 			startTime	: 3600,
-			endTime		: 3600 + 7 * 24 * 3600,
+			endTime		: 3600 + 4 * 7 * 24 * 3600,
 			template	: dietTreatmentTemplate
 		).setFieldValue('Diet', 'high fat')
 
 		def evBV = new Event(
 			startTime	: 3600,
-			endTime		: 3600 + 7 * 24 * 3600,
+			endTime		: 3600 + 4 * 7 * 24 * 3600,
 			template	: boostTreatmentTemplate
 		).setFieldValue('Control', 'true')
 
 		def evBL = new Event(
-			startTime	: 3600,
-			endTime		: 3600 + 7 * 24 * 3600,
-			template	: boostTreatmentTemplate
-		).setFieldValue('Control', 'false')
-
-		def evLF4 = new Event(
-			startTime	: 3600,
-			endTime		: 3600 + 4 * 7 * 24 * 3600,
-			template	: dietTreatmentTemplate
-		).setFieldValue('Diet', 'low fat')
-
-		def evHF4 = new Event(
-			startTime	: 3600,
-			endTime		: 3600 + 4 * 7 * 24 * 3600,
-			template	: dietTreatmentTemplate
-		).setFieldValue('Diet', 'high fat')
-
-		def evBV4 = new Event(
-			startTime	: 3600,
-			endTime		: 3600 + 4 * 7 * 24 * 3600,
-			template	: boostTreatmentTemplate
-		).setFieldValue('Control', 'true')
-
-		def evBL4 = new Event(
 			startTime	: 3600,
 			endTime		: 3600 + 4 * 7 * 24 * 3600,
 			template	: boostTreatmentTemplate
@@ -239,29 +215,54 @@ class ExampleStudies {
 			sampleTemplate: humanTissueSampleTemplate).setFieldValue('Sample weight', 5F)
 
 		// Add events to study
-		mouseStudy.addToEvents(evLF).addToEvents(evHF).addToEvents(evBV).addToEvents(evBL).addToEvents(evLF4).addToEvents(evHF4).addToEvents(evBV4).addToEvents(evBL4).addToSamplingEvents(evS).addToSamplingEvents(evS4).save(failOnError:true)
+		mouseStudy.addToEvents(evLF).addToEvents(evHF).addToEvents(evBV).addToEvents(evBL).addToSamplingEvents(evS).addToSamplingEvents(evS4).save(failOnError:true)
 
 		// Extra check if the SamplingEvents are saved correctly
 		evS.save(failOnError:true)
 		evS4.save(failOnError:true)
 
-		def LFBV1 = new EventGroup(name: "10% fat + vehicle for 1 week").addToEvents(evLF).addToEvents(evBV).addToSamplingEvents(evS)
+		// Create event groups
+		def LF = new EventGroup(name: "10% fat")
+		LF.addToEvents(evLF)
+		def HF = new EventGroup(name: "45% fat")
+		HF.addToEvents(evHF)
+		def BV = new EventGroup(name: "vehicle")
+		BV.addToEvents(evBV)
+		def BL = new EventGroup(name: "leptin")
+		BL.addToEvents(evBL)
+		def S1 = new EventGroup(name: "1 week")
+		S1.addToSamplingEvents(evS)
+		def S4 = new EventGroup(name: "4 weeks")
+		S4.addToSamplingEvents(evS4)
 
-		def LFBL1 = new EventGroup(name: "10% fat + leptin for 1 week").addToEvents(evLF).addToEvents(evBL).addToSamplingEvents(evS)
+		// Add event groups to study
+		mouseStudy.addToEventGroups(LF).addToEventGroups(HF).addToEventGroups(BV).addToEventGroups(BL).addToEventGroups(S1).addToEventGroups(S4).save(failOnError:true)
 
-		def HFBV1 = new EventGroup(name: "45% fat + vehicle for 1 week").addToEvents(evHF).addToEvents(evBV).addToSamplingEvents(evS)
+		def LFBV1 = new SubjectGroup(name: "10% fat + vehicle for 1 week")
+		def LFBV1es = new SubjectEventGroup(startTime: 0, subjectGroups: [LFBV1], eventGroups: [LF, BV, S1])
 
-		def HFBL1 = new EventGroup(name: "45% fat + leptin for 1 week").addToEvents(evHF).addToEvents(evBL).addToSamplingEvents(evS)
+		def LFBL1 = new SubjectGroup(name: "10% fat + leptin for 1 week")
+		def LFBL1es = new SubjectEventGroup(startTime: 0, subjectGroups: [LFBL1], eventGroups: [LF, BL, S1])
 
-		def LFBV4 = new EventGroup(name: "10% fat + vehicle for 4 weeks").addToEvents(evLF4).addToEvents(evBV4).addToSamplingEvents(evS4)
+		def HFBV1 = new SubjectGroup(name: "45% fat + vehicle for 1 week")
+		def HFBV1es = new SubjectEventGroup(startTime: 0, subjectGroups: [HFBV1], eventGroups: [HF, BV, S1])
 
-		def LFBL4 = new EventGroup(name: "10% fat + leptin for 4 weeks").addToEvents(evLF4).addToEvents(evBL4).addToSamplingEvents(evS4)
+		def HFBL1 = new SubjectGroup(name: "45% fat + leptin for 1 week")
+		def HFBL1es = new SubjectEventGroup(startTime: 0, subjectGroups: [HFBL1], eventGroups: [HF, BL, S1])
 
-		def HFBV4 = new EventGroup(name: "45% fat + vehicle for 4 weeks").addToEvents(evHF4).addToEvents(evBV4).addToSamplingEvents(evS4)
+		def LFBV4 = new SubjectGroup(name: "10% fat + vehicle for 4 weeks")
+		def LFBV4es = new SubjectEventGroup(startTime: 0, subjectGroups: [LFBV1], eventGroups: [LF, BV, S4])
 
-		def HFBL4 = new EventGroup(name: "45% fat + leptin for 4 weeks").addToEvents(evHF4).addToEvents(evBL4).addToSamplingEvents(evS4)
+		def LFBL4 = new SubjectGroup(name: "10% fat + leptin for 4 weeks")
+		def LFBL4es = new SubjectEventGroup(startTime: 0, subjectGroups: [LFBL1], eventGroups: [LF, BL, S4])
 
-		// Add subjects and samples and compose EventGroups
+		def HFBV4 = new SubjectGroup(name: "45% fat + vehicle for 4 weeks")
+		def HFBV4es = new SubjectEventGroup(startTime: 0, subjectGroups: [LFBL1], eventGroups: [HF, BV, S4])
+
+		def HFBL4 = new SubjectGroup(name: "45% fat + leptin for 4 weeks")
+		def HFBL4es = new SubjectEventGroup(startTime: 0, subjectGroups: [LFBL1], eventGroups: [HF, BL, S4])
+
+		// Add subjects and samples and compose SubjectGroups
 		def x = 1
 		80.times {
 			def currentSubject = new Subject(
@@ -276,18 +277,18 @@ class ExampleStudies {
 
             currentSubject.save(failOnError:true)
 
-			// Add subject to appropriate EventGroup
-            def tmpEventGroup
-			if (x > 70) { tmpEventGroup = HFBL4 }
-			else if (x > 60) { tmpEventGroup = HFBV4 }
-			else if (x > 50) { tmpEventGroup = LFBL4 }
-			else if (x > 40) { tmpEventGroup = LFBV4 }
-			else if (x > 30) { tmpEventGroup = HFBL1 }
-			else if (x > 20) { tmpEventGroup = HFBV1 }
-			else if (x > 10) { tmpEventGroup = LFBL1 }
-			else { tmpEventGroup = LFBV1 }
+			// Add subject to appropriate SubjectGroup
+            def tmpSubjectGroup
+			if (x > 70) { tmpSubjectGroup = HFBL4 }
+			else if (x > 60) { tmpSubjectGroup = HFBV4 }
+			else if (x > 50) { tmpSubjectGroup = LFBL4 }
+			else if (x > 40) { tmpSubjectGroup = LFBV4 }
+			else if (x > 30) { tmpSubjectGroup = HFBL1 }
+			else if (x > 20) { tmpSubjectGroup = HFBV1 }
+			else if (x > 10) { tmpSubjectGroup = LFBL1 }
+			else { tmpSubjectGroup = LFBV1 }
 
-            tmpEventGroup.addToSubjects(currentSubject)
+            tmpSubjectGroup.addToSubjects(currentSubject)
 
 			// Create sample
 			def currentSample = new Sample(
@@ -303,8 +304,11 @@ class ExampleStudies {
             currentSample.save(failOnError:true)
         }
 
-		// Add EventGroups to study
-		mouseStudy.addToEventGroups(LFBV1).addToEventGroups(LFBL1).addToEventGroups(HFBV1).addToEventGroups(HFBL1).addToEventGroups(LFBV4).addToEventGroups(LFBL4).addToEventGroups(HFBV4).addToEventGroups(HFBL4).save(failOnError:true)
+		// Add SubjectGroups to study
+		mouseStudy.addToSubjectGroups(LFBV1).addToSubjectGroups(LFBL1).addToSubjectGroups(HFBV1).addToSubjectGroups(HFBL1).addToSubjectGroups(LFBV4).addToSubjectGroups(LFBL4).addToSubjectGroups(HFBV4).addToSubjectGroups(HFBL4).save(failOnError:true)
+
+		// Add SubjectEventGroups to study
+		mouseStudy.addToSubjectEventGroups(LFBV1es).addToSubjectEventGroups(LFBL1es).addToSubjectEventGroups(HFBV1es).addToSubjectEventGroups(HFBL1es).addToSubjectEventGroups(LFBV4es).addToSubjectEventGroups(LFBL4es).addToSubjectEventGroups(HFBV4es).addToSubjectEventGroups(HFBL4es).save(failOnError:true)
 
 		// Add persons and publications to study
 		def studyperson1 = new StudyPerson(person: person1, role: role1)
@@ -327,7 +331,8 @@ class ExampleStudies {
 
 		humanStudy.save(failOnError:true)
 
-		def rootGroup = new EventGroup(name: 'Root group')
+		def rootGroup = new SubjectGroup(name: 'Root group')
+		def rootEventGroup = new EventGroup(name: 'Study regime')
 
 		def fastingEvent = new Event(
 			startTime		: 3 * 24 * 3600 + 22 * 3600,
@@ -344,14 +349,19 @@ class ExampleStudies {
 			template		: bloodSamplingEventTemplate,
 			sampleTemplate	: humanBloodSampleTemplate).setFieldValue('Sample volume', 4.5F)
 
-		rootGroup.addToEvents fastingEvent
-		rootGroup.addToSamplingEvents bloodSamplingEventBefore
-		rootGroup.addToSamplingEvents bloodSamplingEventAfter
+		rootEventGroup.addToEvents fastingEvent
+		rootEventGroup.addToSamplingEvents bloodSamplingEventBefore
+		rootEventGroup.addToSamplingEvents bloodSamplingEventAfter
 
 		humanStudy.addToEvents(fastingEvent)
 		humanStudy.addToSamplingEvents(bloodSamplingEventBefore)
 		humanStudy.addToSamplingEvents(bloodSamplingEventAfter)
-		humanStudy.addToEventGroups rootGroup
+		humanStudy.addToSubjectGroups rootGroup
+		humanStudy.addToEventGroups rootEventGroup
+
+		// Define subject - event group mapping - straightforward in this case
+		def rootSubjectEventGroup = new SubjectEventGroup(startTime: 0, subjectGroups: [rootGroup], eventGroups: [rootEventGroup])
+		humanStudy.addToSubjectEventGroups(rootSubjectEventGroup)
 
 		humanStudy.save(failOnError:true)
 
