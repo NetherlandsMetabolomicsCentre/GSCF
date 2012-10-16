@@ -23,6 +23,13 @@ class StudyViewController {
 	}
 
 	/**
+	 * render dynamic js
+	 */
+	def js = {
+		println params
+	}
+
+	/**
 	 * view, create or modify a study (if applicable)
 	 */
 	def view = {
@@ -69,17 +76,30 @@ class StudyViewController {
 			study.owner = user
 		}
 
-		println user
-		println study
-
 		// got a study?
 		if (study) {
+			// story the study instance in the session
+			session.studyData = [
+					study: study,
+					canRead: study.canRead(user),
+					canWrite: study.canWrite(user),
+					modified: (study.id) ? false : true
+					]
+
 			// yes, render the study view page
-			render(view: "view", model: [study: study, user: user] )
+			render(view: "view", model: [studyData: session.studyData] )
 		} else {
 			// no user and/or no study. As only users can create
 			// a new study show the 401 page
 			render(view: "/error/_401")
 		}
+	}
+
+	def ajaxTimeline = {
+		render("timeline")
+	}
+
+	def ajaxDetails = {
+		render("details")
 	}
 }
