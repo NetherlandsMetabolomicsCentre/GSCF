@@ -2,19 +2,15 @@ package dbnp.studycapturing
 import org.dbnp.gdt.*
 
 /**
- * EventGroup groups events
- *
- * Revision information:
- * $Rev$
- * $Author$
- * $Date$
+ * EventGroup Domain Class
+ * Models a group of events that can be re-used in the study design
+ * Is referred to by the SubjectEventGroup class
  */
 class EventGroup extends Identity {
 	String name
 
 	static belongsTo = [parent : Study]
 	static hasMany = [
-			subjects: Subject,
 			events: Event,
 			samplingEvents: SamplingEvent
 	]

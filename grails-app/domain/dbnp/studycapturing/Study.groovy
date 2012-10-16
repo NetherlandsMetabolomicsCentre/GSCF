@@ -23,7 +23,9 @@ class Study extends TemplateEntity {
 	List subjects
 	List events
 	List samplingEvents
+	List subjectGroups
 	List eventGroups
+	List subjectEventGroups
 	List samples
 	List assays
 	boolean publicstudy = false  // Determines whether anonymous users are allowed to see this study. This has only effect when published = true
@@ -35,7 +37,9 @@ class Study extends TemplateEntity {
 		subjects: Subject,
 		samplingEvents: SamplingEvent,
 		events: Event,
+		subjectGroups: SubjectGroup,
 		eventGroups: EventGroup,
+		subjectEventGroups: SubjectEventGroup,
 		samples: Sample,
 		assays: Assay,
 		persons: StudyPerson,
