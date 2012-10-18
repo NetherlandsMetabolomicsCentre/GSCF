@@ -1,1 +1,4 @@
-todo text [${entity}]<br/>
+${entity.getFieldValue(field.name)}
+${entity.getFieldValue(field.name)}
+${entity.getFieldValue(field.name)}
+${entity.getFieldValue(field.name)}

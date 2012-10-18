@@ -27,6 +27,13 @@
 						    element.animate({ height: element.prop('scrollHeight') }, 500);
 				});
 		    });
+
+		    // event handlers
+		    $(document).on('hover', '.editable', function(event) {
+			    if (event.type == "mouseenter" || event.type == "mouseleave") {
+			        $(this).toggleClass('highlight');
+			    }
+		    });
 	    });
     </script>
 </head>

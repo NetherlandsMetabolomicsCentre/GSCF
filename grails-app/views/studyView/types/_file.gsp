@@ -1,1 +1,1 @@
-todo: file [${entity}]<br/>
+${entity.getFieldValue(field.name)}

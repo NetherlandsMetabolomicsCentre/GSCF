@@ -1,11 +1,66 @@
 #studyView .box {
 	width: 960px;
 	height: 20px;
-	border: 1px solid red;
+	border: 1px solid #006dba;
 	margin-bottom: 20px;
 	overflow: hidden;
+
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 2px solid #006dba;
 }
 
 #studyView .waitForLoad {
 	background: url(../images/ajaxflow/ajax-loader.gif) no-repeat center top;
+}
+
+#studyView element {
+	display: block;
+	width: 100%;
+	min-height: 18px;
+	margin-bottom: 5px;
+}
+
+#studyView element description {
+	display: inline-block;
+	vertical-align: top;
+	min-width: 100px;
+	min-height: inherit;
+	width: 200px;
+	color: #006dba;
+}
+
+#studyView element value {
+	display: inline-block;
+	min-width: 100px;
+	min-height: inherit;
+	max-width: 752px;
+
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px solid #ffc0cb;
+}
+
+#studyView element .highlight {
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px dashed #808080;
+}
+
+#studyView element debug {
+	display: inline-block;
+	background-color: #ffb6c1;
+	color: red;
+	float: right;
+	width: 75px;
+	text-align: right;
+	margin-left: -100px;
+	margin-top: 0px;
+	min-height: inherit;
+
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px dashed red;
+
+	text-shadow: 0 1px 0px rgba(0, 0, 0, 0.68);
 }

@@ -1,1 +1,1 @@
-todo boolean [${entity}]<br/>
+${entity.getFieldValue(field.name)}
