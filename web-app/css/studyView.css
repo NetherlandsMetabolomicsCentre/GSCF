@@ -28,12 +28,16 @@
 #studyView element .highlight {
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-	border: 1px dashed #808080;
+	border: 1px dashed #ffb6c1;
+
+	transition: all 0.3s ease-in-out 0s;
 }
 #studyView element .editting {
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-	border: 1px solid #ff0000;
+	border: 1px solid #90ee90;
+
+	transition: all 0.5s ease-in-out 0s;
 }
 /** end :: generics **/
 
@@ -44,9 +48,9 @@
 	min-height: inherit;
 	max-width: 100px;
 
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	border: 1px solid #ffc0cb;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	border: 1px solid #87cefa;
 
 	vertical-align: top;
 }
@@ -69,9 +73,9 @@
 	min-height: inherit;
 	max-width: 752px;
 
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	border: 1px solid #ffc0cb;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	border: 1px solid #87cefa;
 }
 /** begin :: vertical view **/
 
