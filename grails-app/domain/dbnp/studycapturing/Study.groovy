@@ -120,12 +120,15 @@ class Study extends TemplateEntity {
 	 * returns all events and sampling events that do not belong to a group
 	 */
 	def List<Event> getOrphanEvents() {
-		def orphans = events.findAll { event -> !event.belongsToGroup(eventGroups) } +
-		samplingEvents.findAll { event -> !event.belongsToGroup(eventGroups) }
-
-		return orphans
+		events.findAll { event -> !event.belongsToGroup(eventGroups) }
 	}
 
+	/**
+	 * returns all events and sampling events that do not belong to a group
+	 */
+	def List<SamplingEvent> getOrphanSamplingEvents() {
+		samplingEvents.findAll { event -> !event.belongsToGroup(eventGroups) }
+	}
 	/**
 	 * Return the unique Subject templates that are used in this study
 	 */
