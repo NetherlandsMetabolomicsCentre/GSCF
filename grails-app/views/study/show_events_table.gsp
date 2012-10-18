@@ -75,7 +75,7 @@
   <g:each in="${studyList}" var="studyInstance">
 	<%
 	  // Sort the groups by name
-	  def sortedEventGroups = studyInstance.eventGroups.sort( { a, b ->
+	  def sortedSubjectGroups = studyInstance.subjectGroups.sort( { a, b ->
 		  return a.name <=> b.name;
 	  }  as Comparator );
 
@@ -83,10 +83,10 @@
 	  // number of events per template in a group)
 	  def maxNumberEventsPerTemplate = [:];
 	  def rowsPerStudy = 0;
-	  sortedEventGroups.each { group ->
+	  sortedSubjectGroups.each { group ->
 		def max = 1;
 		showTemplates.each { template ->
-		  def num = ( group.events + group.samplingEvents ).findAll { it.template == template }.size();
+		  def num = ( group.giveEvents() + group.giveSamplingEvents() ).findAll { it.template == template }.size();
 		  if( num > max )
 			max = num;
 		}
@@ -96,7 +96,7 @@
 
 	  def orphans = studyInstance.getOrphanEvents();
 	  if( orphans?.size() > 0 ) {
-		sortedEventGroups.add( new EventGroup(
+		sortedSubjectGroups.add( new EventGroup(
 		  id: -1,
 		  name: 'No group',
 		  events: orphans,
@@ -104,9 +104,9 @@
 		));
 	  }
 	%>
-	<g:each in="${sortedEventGroups}" var="eventGroup" status="j">
+	<g:each in="${sortedSubjectGroups}" var="subjectGroup" status="j">
 	  <g:set var="n" value="${1}" />
-	  <g:while test="${n <= maxNumberEventsPerTemplate[ eventGroup.name ]}">
+	  <g:while test="${n <= maxNumberEventsPerTemplate[ subjectGroup.name ]}">
 
 		<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 		  <g:if test="${n == 1}">
@@ -115,12 +115,12 @@
 				${studyInstance.title}
 			  </td>
 			</g:if>
-			<td rowspan="${maxNumberEventsPerTemplate[ eventGroup.name ]}">${eventGroup.name}</td>
+			<td rowspan="${maxNumberEventsPerTemplate[ subjectGroup.name ]}">${subjectGroup.name}</td>
 		  </g:if>
 
 		  <g:each in="${showTemplates}" var="currentEventTemplate">
 			  <%
-				def templateEvents = (eventGroup.events + eventGroup.samplingEvents).findAll { it.template == currentEventTemplate }.sort { a, b -> a.startTime <=> b.startTime }.asType(List)
+				def templateEvents = (subjectGroup.giveEvents() + subjectGroup.giveSamplingEvents()).findAll { it.template == currentEventTemplate }.sort { a, b -> a.startTime <=> b.startTime }.asType(List)
 				def event = templateEvents.size() >= n ? templateEvents[ n - 1 ] : null;
 			  %>
 			  <td class="templateFieldValue"><g:if test="${event}">${new RelTime( event.startTime ).toString()}</g:if></td>
@@ -130,16 +130,16 @@
 		  </g:each>
 
 		  <g:if test="${n == 1}">
-			<% sortedGroupSubjects = eventGroup.subjects.sort( { a, b -> a.name <=> b.name } as Comparator )  %>
+			<% sortedGroupSubjects = subjectGroup.subjects.sort( { a, b -> a.name <=> b.name } as Comparator )  %>
 
-			<td rowspan="${maxNumberEventsPerTemplate[ eventGroup.name ]}" title="${sortedGroupSubjects.name.join( ', ' )}">
-				<g:if test="${eventGroup.subjects.size()==0}">
+			<td rowspan="${maxNumberEventsPerTemplate[ subjectGroup.name ]}" title="${sortedGroupSubjects.name.join( ', ' )}">
+				<g:if test="${subjectGroup.subjects.size()==0}">
 					-
 				</g:if>
 				<g:else>
-					<g:each in="${eventGroup.subjects.species.unique()}" var="currentSpecies" status="k">
+					<g:each in="${subjectGroup.subjects.species.unique()}" var="currentSpecies" status="k">
 						<g:if test="${k > 0}">,</g:if>
-						<%=eventGroup.subjects.findAll { return it.species == currentSpecies; }.size() %>
+						<%=subjectGroup.subjects.findAll { return it.species == currentSpecies; }.size() %>
 						${currentSpecies}
 					</g:each>
 				</g:else>

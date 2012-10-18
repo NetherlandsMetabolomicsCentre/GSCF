@@ -1,5 +1,6 @@
 package dbnp.studycapturing
 import org.dbnp.gdt.Identity
+import org.dbnp.gdt.TemplateEntity
 
 /**
  * SubjectGroup Domain Class
@@ -25,19 +26,34 @@ class SubjectGroup extends Identity {
 	/**
 	 * Calculate all events which occur in this event group
 	 */
-	def giveEvents = {
-		def events = []
+	List<Event> giveEvents() {
+		List<Event> events = new ArrayList<Event>()
 		parent.subjectEventGroups.each {
 			if (this.id in it.subjectGroups.id) {
-				it.eventGroups*.events.each { event ->
-					if (event) events << event
-				}
-				it.eventGroups*.samplingEvents.each { event ->
-					if (event) events << event
+				it.eventGroups.each {
+					it.events.each { event ->
+						if (event) events << event
+					}
 				}
 			}
 		}
 		events
 	}
 
+	/**
+	 * Calculate all sampling events which occur in this event group
+	 */
+	List<SamplingEvent> giveSamplingEvents() {
+		List<SamplingEvent> events = new ArrayList<SamplingEvent>()
+		parent.subjectEventGroups.each {
+			if (this.id in it.subjectGroups.id) {
+				it.eventGroups.each {
+					it.samplingEvents.each { event ->
+						if (event) events << event
+					}
+				}
+			}
+		}
+		events
+	}
 }
