@@ -3,6 +3,7 @@
 	height: 20px;
 	border: 1px solid #006dba;
 	margin-bottom: 20px;
+	padding-top: 5px;
 	overflow: hidden;
 
 	-moz-border-radius: 5px;
@@ -28,6 +29,11 @@
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 	border: 1px dashed #808080;
+}
+#studyView element .editting {
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px solid #ff0000;
 }
 /** end :: generics **/
 
