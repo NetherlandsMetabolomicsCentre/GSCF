@@ -277,12 +277,13 @@ class StudyController {
      *
      */
     def events = {
-        def eventGroupId = Integer.parseInt( params.id );
-        def studyId      = Integer.parseInt( params.study );
-        def eventGroup;
+        def subjectGroupId = Integer.parseInt( params.id )
+        def studyId      = Integer.parseInt( params.study )
+        def subjectGroup
+	    def events
 
-        // eventGroupId == -1 means that the orphaned events should be given
-        if( eventGroupId == -1 ) {
+        // subjectGroupId == -1 means that the orphaned events should be given
+        if( subjectGroupId == -1 ) {
             def studyInstance = Study.get( studyId )
             
             if (studyInstance == null) {
@@ -291,16 +292,16 @@ class StudyController {
                 return;
             }
 
-            events = studyInstance.getOrphanEvents();
+            events = studyInstance.getOrphanEvents() + studyInstance.getOrphanSamplingEvents()
         } else {
-            eventGroup = EventGroup.get(params.id)
+            subjectGroup = SubjectGroup.get(params.id)
 
-            if (eventGroup == null) {
+            if (subjectGroup == null) {
                 flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'eventgroup.label', default: 'Eventgroup'), params.id])}"
                 redirect(action: "list");
                 return;
             }
-            events = eventGroup?.events + eventGroup?.samplingEvents;
+            events = subjectGroup.giveEvents() + subjectGroup.giveSamplingEvents()
         }
 
         // This parameter should give the startdate of the study in milliseconds

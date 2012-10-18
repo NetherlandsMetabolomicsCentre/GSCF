@@ -1,5 +1,5 @@
 <% response.contentType = "text/javascript" %>
-<%@ page import="dbnp.studycapturing.EventGroup" %>
+<%@ page import="dbnp.studycapturing.SubjectGroup; dbnp.studycapturing.EventGroup" %>
 <%@ page import="dbnp.studycapturing.Subject" %>
 /*
   * Creates timeline bands for displaying different timelines
@@ -91,29 +91,29 @@ function createTimelineBands( timelineNr ) {
 
 	<g:set var="bandNr" value="${bandNr+1}" />
 	<%
-	  def sortedEventGroups = study.eventGroups.sort( { a, b ->
+	  def sortedSubjectGroups = study.subjectGroups.sort( { a, b ->
 		  return a.name <=> b.name;
 	  }  as Comparator );
 
-	  def orphans = study.getOrphanEvents();
-	  if( orphans?.size() > 0 ) {
-		sortedEventGroups.add( new EventGroup(
+	  def orphansCount = 0 + study.getOrphanEvents()?.size() + study.getOrphanSamplingEvents()?.size();
+
+	  if( orphansCount > 0 ) {
+		sortedSubjectGroups.add( new SubjectGroup(
 		  id: -1,
 		  name: 'No group',
-		  events: orphans,
 		  subjects: []
 		));
 	  }
 
 	%>
-	<g:each in="${sortedEventGroups}" var="eventGroup" status="i">
+	<g:each in="${sortedSubjectGroups}" var="subjectGroup" status="i">
 	  //------------- Eventgroup ${bandNr} ---------------
 
 	  // Create an eventsource for all events
 	  eventSources[${bandNr}] = new Timeline.DefaultEventSource();
 
 	  // Load events for this eventsource (using jquery)
-	  var event_url = '${createLink(controller:'study', action:'events', id:( eventGroup.id ? eventGroup.id : -1 ), params: [ startDate: study.startDate.getTime(), study: study.id ])}';
+	  var event_url = '${createLink(controller:'study', action:'events', id:( subjectGroup.id ? subjectGroup.id : -1 ), params: [ startDate: study.startDate.getTime(), study: study.id ])}';
 	  $.getJSON(event_url, $.callback( _loadJSONEvents, [0, ${bandNr}, eventSources[${bandNr}], overviewEventSource, event_url] ) );
 
 	  // Create a new timeline band
@@ -149,12 +149,12 @@ function createTimelineBands( timelineNr ) {
 
 	  // Add a title to the bandinfo
 	  <%
-		if (eventGroup.subjects) {
-			ArrayList<Subject> sortedGroupSubjects = eventGroup.subjects.sort( { a, b -> a.name <=> b.name } as Comparator );
+		if (subjectGroup.subjects) {
+			ArrayList<Subject> sortedGroupSubjects = subjectGroup.subjects.sort( { a, b -> a.name <=> b.name } as Comparator );
 
 			// We can only show appr. 30 characters per line and as many lines as there are events
 			def charsPerLine = 40;
-			def numEvents = eventGroup.events?.size() + eventGroup.samplingEvents?.size();
+			def numEvents = subjectGroup.giveEvents().size() + subjectGroup.giveSamplingEvents().size();
 			Integer maxChars = new Integer( numEvents * charsPerLine );
 
 			showSubjects = Subject.trimSubjectNames( sortedGroupSubjects, maxChars );
@@ -164,8 +164,8 @@ function createTimelineBands( timelineNr ) {
 	  %>
 
 	  bandTitleInfo[ timelineNr ][ ${bandNr} ] = {
-		title: "${eventGroup.name}",
-		className: "<g:if test="${ eventGroup.id == -1 || !eventGroup.id  }">no_group</g:if>",
+		title: "${subjectGroup.name}",
+		className: "<g:if test="${ subjectGroup.id == -1 || !subjectGroup.id  }">no_group</g:if>",
 		subjects: "${showSubjects}"
 	  };
 
@@ -173,7 +173,7 @@ function createTimelineBands( timelineNr ) {
 	</g:each>
 
 	// Synchronize all bands
-	<g:each in="${sortedEventGroups}" var="eventGroup" status="i">
+	<g:each in="${sortedSubjectGroups}" var="subjectGroup" status="i">
 	  bandInfos[${i + datesBandNr +1}].syncWith = ${datesBandNr};
 	</g:each>
 
