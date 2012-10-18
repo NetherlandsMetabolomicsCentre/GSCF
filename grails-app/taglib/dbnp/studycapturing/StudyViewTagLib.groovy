@@ -26,8 +26,13 @@ class StudyViewTagLib {
 
 		// iterate through entity fields
 		entity.giveFields().each { field ->
-//			out << render(template: "types/${field.type.toString().toLowerCase()}", model: [entity: entity, field: field])
-			out << render(template: "common/templateField", model: [entity: entity, field: field, fieldType:field.type.toString().toLowerCase()])
+			out << render(template: "common/templateElement", model: [entity: entity, field: field, fieldType:field.type.toString().toLowerCase()])
 		}
+	}
+
+	def horizontal = { attrs, body ->
+		def entity = (attrs.containsKey('entity') && attrs.get('entity') instanceof TemplateEntity) ? attrs.get('entity') : null
+
+		out << render(template: "common/templateFields", model: [entity: entity, fields: entity.giveFields()])
 	}
 }

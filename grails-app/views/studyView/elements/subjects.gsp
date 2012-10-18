@@ -1,5 +1,4 @@
 <g:each in="${subjects}" var="subject">
-subject: ${subject}<br/>
-	<sv:vertical entity="${subject}" />
+	<sv:horizontal entity="${subject}" />
 </g:each>
 
