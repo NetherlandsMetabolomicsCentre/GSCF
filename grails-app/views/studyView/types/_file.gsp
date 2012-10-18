@@ -1,1 +1,1 @@
-${entity.getFieldValue(field.name)}
+${value}

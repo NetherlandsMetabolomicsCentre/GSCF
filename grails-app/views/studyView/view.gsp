@@ -7,7 +7,7 @@
 	    var canWrite = ${canWrite};
 
 	    $('document').ready(function () {
-		    <g:if test="${!canWrite}">
+		    <g:if test="${canWrite}">
 		    // (current and future) event handlers
 		    $(document).on('hover blur focus', '.editable', function(event) {
 			    var t = $(this);
