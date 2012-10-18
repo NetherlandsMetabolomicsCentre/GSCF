@@ -46,19 +46,19 @@ class StudyViewController {
 	def ajaxTimeline = {
 		println params
 		studyViewService.wrap(params, { study, summary ->
-			render(view: "common/timeline", model: [study: study, summary: summary])
+			render(view: "elements/timeline", model: [study: study, summary: summary])
 		})
 	}
 
 	def ajaxDetails = {
 		studyViewService.wrap(params, { study, summary ->
-			render(view: "common/details", model: [study: study, summary: summary])
+			render(view: "elements/details", model: [study: study, summary: summary])
 		})
 	}
 
 	def ajaxSubjects = {
 		studyViewService.wrap(params, { study, summary ->
-			render(view: "common/subjects", model: [subjects: study.subjects])
+			render(view: "elements/subjects", model: [subjects: study.subjects])
 		})
 	}
 }
