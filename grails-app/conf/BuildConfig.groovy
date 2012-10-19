@@ -54,6 +54,10 @@ grails.project.dependency.resolution = {
 
 	    // we seem to be needing XStream in some cases
 	    compile("com.thoughtworks.xstream:xstream:1.3.1")
+
+	    // apparently needed to run integration tests
+	    test 'axis:axis-jaxrpc:1.4'
+	    test "uk.ac.ebi:ontoCAT:0.9.8"
     }
 	plugins {
 		compile(
