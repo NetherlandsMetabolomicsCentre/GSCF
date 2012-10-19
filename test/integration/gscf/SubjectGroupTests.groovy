@@ -1,10 +1,10 @@
 package gscf
 
-import gscf.StudyTests
-import dbnp.studycapturing.*
+import dbnp.studycapturing.SubjectGroup
+import dbnp.studycapturing.Study
 
 /**
- * Test the creation of a EventGroup on data model level
+ * Test the creation of a SubjectGroup on data model level
  *
  * @author keesvb
  * @since 20100704
@@ -16,11 +16,11 @@ import dbnp.studycapturing.*
  * $Date$
  */
 
-class EventGroupTests extends StudyTests {
+class SubjectGroupTests extends StudyTests {
 
 	// This test extends StudyTests, so that we have a test study to assign as a parent study
 
-	final String testEventGroupName = "Test Group"
+	final String testSubjectGroupName = "Test Subject Group"
 
 	protected void setUp() {
 		// Create the study
@@ -31,16 +31,16 @@ class EventGroupTests extends StudyTests {
 		assert study
 
 		// Create sample with the retrieved study as parent
-		def group = new EventGroup(
-		    name: testEventGroupName
+		def group = new SubjectGroup(
+		    name: testSubjectGroupName
 		)
 
 		// At this point, the event group should not validate, because it doesn't have a parent study assigned
 		assert !group.validate()
 
 		// Add the group to the retrieved parent study
-		study.addToEventGroups(group)
-		assert study.eventGroups.find { it.name == group.name}
+		study.addToSubjectGroups(group)
+		assert study.subjectGroups.find { it.name == group.name}
 
 		// Now, the group should validate
 		if (!group.validate()) {
@@ -48,12 +48,12 @@ class EventGroupTests extends StudyTests {
 		}
 		assert group.validate()
 
-		// Create an event and add it to the group
-		/*def event = EventTests.createEvent(study)
-		assert event
-		study.addToEvents(event)
+		// Create a subject and add it to the group
+		def subject = SubjectTests.createSubject(study)
+		assert subject
+		study.addToSubjects(subject)
 		assert study.save()
-		group.addToEvents(event)*/
+		group.addToSubjects(subject)
 
 		// Make sure the group is saved to the database
 		assert group.save(flush: true)
@@ -62,9 +62,9 @@ class EventGroupTests extends StudyTests {
 
 	void testSave() {
 		// Try to retrieve the group and make sure it's the same
-		def groupDB = EventGroup.findByName(testEventGroupName)
+		def groupDB = SubjectGroup.findByName(testSubjectGroupName)
 		assert groupDB
-		assert groupDB.name.equals(testEventGroupName)
+		assert groupDB.name.equals(testSubjectGroupName)
 
 		// A group without a name should not be saveable
 		groupDB.name = null
@@ -72,9 +72,9 @@ class EventGroupTests extends StudyTests {
 
 	}
 
-	// This test is switched off, as event groups should be deleted via study.deleteEventGroup() and not directly
+	// This test is switched off, as event groups should be deleted via study.deleteSubjectGroup() and not directly
 	void dontTestDelete() {
-		def groupDB = EventGroup.findByName(testEventGroupName)
+		def groupDB = SubjectGroup.findByName(testSubjectGroupName)
 		assert groupDB
 
 		groupDB.delete()
@@ -90,37 +90,37 @@ class EventGroupTests extends StudyTests {
 		// Now, delete the group from the study groups collection, and then the delete action should be cascaded to the group itself
 		def study = Study.findByTitle(testStudyName)
 		assert study
-		study.removeFromEventGroups groupDB
+		study.removeFromSubjectGroups groupDB
 
 		// Strangely, calling study.save() gives an error here since the subject is not removed from the group?!!
 		assert study.save()
 
 		// Make sure the group doesn't exist anymore at this point
-		assert !EventGroup.findByName(testEventGroupName)
-		assert EventGroup.count() == 0
-		assert study.eventGroups.size() == 0
+		assert !SubjectGroup.findByName(testSubjectGroupName)
+		assert SubjectGroup.count() == 0
+		assert study.subjectGroups.size() == 0
 	}
 
 	void testDeleteViaStudy() {
 
-		def groupDB = EventGroup.findByName(testEventGroupName)
+		def groupDB = SubjectGroup.findByName(testSubjectGroupName)
 		assert groupDB
 
 		def study = Study.findByTitle(testStudyName)
 		assert study
-		def msg = study.deleteEventGroup(groupDB)
+		def msg = study.deleteSubjectGroup(groupDB)
 		println msg
 		study.save()
 
 		// Make sure the group doesn't exist anymore at this point
-		assert !EventGroup.findByName(testEventGroupName)
-		assert EventGroup.count() == 0
-		assert study.eventGroups.size() == 0
+		assert !SubjectGroup.findByName(testSubjectGroupName)
+		assert SubjectGroup.count() == 0
+		assert study.subjectGroups.size() == 0
 
 	}
 
 	void testParentStudy() {
-		def group = EventGroup.findByName(testEventGroupName)
+		def group = SubjectGroup.findByName(testSubjectGroupName)
 		assert group
 
 		assert group.parent
@@ -128,18 +128,18 @@ class EventGroupTests extends StudyTests {
 	}
 
 	void testUniqueNameConstraint() {
-		def group = EventGroup.findByName(testEventGroupName)
+		def group = SubjectGroup.findByName(testSubjectGroupName)
 		assert group
 
 		def study = group.parent
 		assert study
 
-		def group2 = new EventGroup(
-		    name: testEventGroupName
+		def group2 = new SubjectGroup(
+		    name: testSubjectGroupName
 		)
 
 		// Add the group to the retrieved parent study
-		study.addToEventGroups(group2)
+		study.addToSubjectGroups(group2)
 
 		// At this point, the group should not validate or save, because there is already a group with that name in the study
 		assert !group2.validate()

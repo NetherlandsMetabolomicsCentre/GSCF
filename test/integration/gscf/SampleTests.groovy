@@ -260,10 +260,6 @@ class SampleTests extends StudyTests {
 		def event = sampleDB.parentEvent
 		assert event
 
-		// Add parent subject
-		addParentSubject()
-		Subject subject = sampleDB.parentSubject
-
 		// Create an event group in this study with the sample's sampling event and subject
 		def group = new EventGroup(
 		    name: testEventGroupName
@@ -271,7 +267,6 @@ class SampleTests extends StudyTests {
 		study.addToEventGroups(group)
 		assert group.validate()
 
-		group.addToSubjects(subject)
 		group.addToSamplingEvents(event)
 
 		assert study.eventGroups.find { it.name == group.name}
