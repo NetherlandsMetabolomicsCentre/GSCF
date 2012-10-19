@@ -231,7 +231,7 @@ class Study extends TemplateEntity {
 	 */
 	void deleteSubject(Subject subject) {
 		// Delete the subject from the event groups it was referenced in
-		this.eventGroups.each {
+		this.subjectGroups.each {
 			if (it.subjects?.contains(subject)) {
 				it.removeFromSubjects(subject)
 			}
@@ -288,6 +288,29 @@ class Study extends TemplateEntity {
 	}
 
 	/**
+	 * Delete an event from the study, including all its relations
+	 * @param Event
+	 * @void
+	 */
+	void deleteSamplingEvent(Event event) {
+		// remove event from eventGroups
+		this.eventGroups.each() { eventGroup ->
+			eventGroup.removeFromSamplingEvents(event)
+		}
+
+		// Delete the samples that have this event as parent
+		this.samples.findAll { it.parentEvent.equals(event) }.each {
+			this.deleteSample(it)
+		}
+
+		// remove event from the study
+		this.removeFromEvents(event)
+
+		// and perform a hard delete
+		event.delete()
+	}
+
+	/**
 	 * Delete a sample from the study, including all its relations
 	 * @param Event
 	 * @void
@@ -322,7 +345,7 @@ class Study extends TemplateEntity {
 			eventGroup.removeFromSamplingEvents(samplingEvent)
 		}
 
-		// Delete the samples that have this sampling event as parent
+		// Delete the samples that have this sampling event as parent event
 		this.samples.findAll { it.parentEvent.equals(samplingEvent) }.each {
 			// This should remove the sample itself too, because of the cascading belongsTo relation
 			this.deleteSample(it)
@@ -338,7 +361,37 @@ class Study extends TemplateEntity {
 	}
 
 	/**
-	 * Delete an eventGroup from the study, including all its relations
+	 * Delete a subjectGroup from the study, including all its relations
+	 * @param EventGroup
+	 * @void
+	 */
+	void deleteSubjectGroup(SubjectGroup subjectGroup) {
+
+		// delete subject group from SubjectEventGroup objects in which it is referenced
+		this.subjectEventGroups.each() { subjectEventGroup ->
+			if (subjectEventGroup.subjectGroups.contains(subjectGroup)) {
+				subjectEventGroup.removeFromSubjectGroups(subjectGroup)
+			}
+		}
+
+		// If the event group contains subjects
+		if (subjectGroup.subjects) {
+			// remove all subject from this eventGroup
+			subjectGroup.subjects.findAll {}.each() {
+				subjectGroup.removeFromSubjects(it)
+			}
+		}
+
+		// remove the subjectGroup from the study
+		this.removeFromSubjectGroups(subjectGroup)
+
+		// Also here, contrary to documentation, an extra delete() is needed
+		// otherwise cascaded deletes are not properly performed
+		subjectGroup.delete()
+	}
+
+	/**
+	 * Delete an eventGroup from the study, including any dependent samples, but not the events and sampling events themselves
 	 * @param EventGroup
 	 * @void
 	 */
@@ -350,6 +403,8 @@ class Study extends TemplateEntity {
 				// find all samples that
 				//	- are part of this study
 				this.samples.findAll { sample ->
+					println "let op - vergeleken worden nu ${sample} dan ${sample.parentEventGroup} met ${eventGroup}"
+
 					(
 						// - belong to this eventGroup
 						(
@@ -365,6 +420,7 @@ class Study extends TemplateEntity {
 					)
 				}
 				.each() { sample ->
+					println "s: ${sample}"
 					// remove sample from study
 					this.deleteSample(sample)
 				}
@@ -376,12 +432,9 @@ class Study extends TemplateEntity {
 			}
 		}
 
-		// If the event group contains subjects
-		if (eventGroup.subjects) {
-			// remove all subject from this eventGroup
-			eventGroup.subjects.findAll {}.each() {
-				eventGroup.removeFromSubjects(it)
-			}
+		// remove all Events from this eventGroup
+		eventGroup.events.findAll {}.each() {
+			eventGroup.removeFromEvents(it)
 		}
 
 		// remove the eventGroup from the study
