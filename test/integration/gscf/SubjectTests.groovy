@@ -174,13 +174,10 @@ class SubjectTests extends StudyTests {
 		assert !subject.isDomainField('123~!name')
 		assert !subject.isDomainField(testSubjectBMITemplateFieldName)
 
-		// Get the ontologies from species and make sure this is 1 ontology with NCBO ID 1132
+		// Get the ontologies from species and make sure the species ontology with NCBO ID 1132 is present
 		def speciesOntologies = domainFields[1].ontologies
-		assert speciesOntologies.size() == 1
-
-		// Getting the only element in a set is hard in Grails...
-		Ontology speciesOntology = speciesOntologies.asList().first()
-		assert speciesOntology.ncboId == 1132
+		def speciesOntology = speciesOntologies.find { it.ncboId == 1132 }
+		assert speciesOntology
 
 		def speciesTerms = speciesOntology.giveTerms()
 		def humanTerm = speciesTerms.find { it.name == testSubjectSpeciesTerm}
