@@ -1,0 +1,1 @@
+<sv:vertical entity="${study}" canRead="${canRead}" canWrite="${canWrite}" />

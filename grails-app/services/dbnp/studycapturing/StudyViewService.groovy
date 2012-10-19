@@ -67,8 +67,9 @@ class StudyViewService {
 	}
 
 	def wrap(params,Closure block) {
+		Long id = (params.containsKey('id') && (params.get('id').toLong()) > 0) ? params.get('id').toLong() : 0
+
 		try {
-			Long id = (params.containsKey('id') && (params.get('id').toLong()) > 0) ? params.get('id').toLong() : 0
 			Study study = fetchStudyForCurrentUserWithId(id)
 			Boolean summary = (params.containsKey('summary')) ? (params.get('summary') as Boolean) : false
 

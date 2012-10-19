@@ -1,11 +1,98 @@
 #studyView .box {
 	width: 960px;
 	height: 20px;
-	border: 1px solid red;
+	border: 1px solid #006dba;
 	margin-bottom: 20px;
+	padding-top: 5px;
 	overflow: hidden;
+
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 2px solid #006dba;
 }
 
 #studyView .waitForLoad {
 	background: url(../images/ajaxflow/ajax-loader.gif) no-repeat center top;
+}
+
+#studyView element {
+	display: block;
+	overflow: hidden;
+	white-space: nowrap;
+	width: auto;
+	min-height: 20px;
+	margin-bottom: 5px;
+}
+
+/** begin :: generics **/
+#studyView element .highlight {
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px dashed #ffb6c1;
+
+	transition: all 0.3s ease-in-out 0s;
+}
+#studyView element .editting {
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px solid #90ee90;
+
+	transition: all 0.5s ease-in-out 0s;
+}
+/** end :: generics **/
+
+/** begin :: horizontal view **/
+#studyView element field {
+	display: inline-block;
+	min-width: 100px;
+	min-height: inherit;
+	max-width: 100px;
+
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	border: 1px solid #87cefa;
+
+	vertical-align: top;
+}
+/** end :: horizontal view **/
+
+/** begin :: vertical view **/
+#studyView element description {
+	display: inline-block;
+	vertical-align: top;
+	min-width: 100px;
+	min-height: inherit;
+	width: 200px;
+	color: #006dba;
+}
+
+#studyView element value {
+	display: inline-block;
+	white-space: normal;
+	min-width: 100px;
+	min-height: inherit;
+	max-width: 752px;
+
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	border: 1px solid #87cefa;
+}
+/** begin :: vertical view **/
+
+#studyView element debug {
+	display: inline-block;
+	background-color: #ffb6c1;
+	color: red;
+	float: right;
+	width: 75px;
+	text-align: right;
+	margin-left: -100px;
+	margin-top: 0px;
+	min-height: inherit;
+
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px dashed red;
+
+	text-shadow: 0 1px 0px rgba(0, 0, 0, 0.68);
 }

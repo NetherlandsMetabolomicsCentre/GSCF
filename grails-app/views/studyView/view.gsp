@@ -7,6 +7,18 @@
 	    var canWrite = ${canWrite};
 
 	    $('document').ready(function () {
+		    <g:if test="${canWrite}">
+		    // (current and future) event handlers
+		    $(document).on('hover blur focus', '.editable', function(event) {
+			    var t = $(this);
+			    if (event.type == "mouseenter" || event.type == "mouseleave") {
+				    t.toggleClass('highlight');
+			    } else if (event.type == 'focusin' || event.type == "focusout") {
+				    t.toggleClass('editting');
+			    }
+		    });
+		    </g:if>
+
 		    // populate all elements
 		    $('div#studyView > div.box').each(function () {
 			    var element = $(this);

@@ -44,21 +44,23 @@ class StudyViewController {
 	}
 
 	def ajaxTimeline = {
-		println params
+		SecUser user = authenticationService.getLoggedInUser()
 		studyViewService.wrap(params, { study, summary ->
-			render(view: "common/timeline", model: [study: study, summary: summary])
+			render(view: "elements/timeline", model: [study: study, summary: summary, canRead: study.canRead(user), canWrite: study.canWrite(user)])
 		})
 	}
 
 	def ajaxDetails = {
+		SecUser user = authenticationService.getLoggedInUser()
 		studyViewService.wrap(params, { study, summary ->
-			render(view: "common/details", model: [study: study, summary: summary])
+			render(view: "elements/details", model: [study: study, summary: summary, canRead: study.canRead(user), canWrite: study.canWrite(user)])
 		})
 	}
 
 	def ajaxSubjects = {
+		SecUser user = authenticationService.getLoggedInUser()
 		studyViewService.wrap(params, { study, summary ->
-			render(view: "common/subjects", model: [subjects: study.subjects])
+			render(view: "elements/subjects", model: [subjects: study.subjects, canRead: study.canRead(user), canWrite: study.canWrite(user)])
 		})
 	}
 }
