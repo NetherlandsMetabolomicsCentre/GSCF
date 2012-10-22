@@ -1,1 +1,1 @@
-${value}
+<value class="${css}">[long:${value}]</value>

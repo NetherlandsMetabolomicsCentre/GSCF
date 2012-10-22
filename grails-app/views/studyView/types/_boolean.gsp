@@ -1,1 +1,1 @@
-${value}
+<value class="${css}">[bool:${value}]</value>
