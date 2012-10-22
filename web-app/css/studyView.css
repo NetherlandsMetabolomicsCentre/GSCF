@@ -49,10 +49,6 @@
 	line-height: 40px;
 	text-align: center;
 	margin-bottom: 20px;
-	/*text-align: right;*/
-	/*margin-left: -100px;*/
-	/*margin-top: 0px;*/
-	/*min-height: inherit;*/
 
 	-moz-border-radius: 5px;
 	border-radius: 5px;
@@ -60,24 +56,31 @@
 
 	text-shadow: 0 1px 0px rgba(0, 0, 0, 0.68);
 }
-/** end :: generics **/
 
-/** begin :: horizontal view **/
-#studyView element field {
+#studyView element value {
 	display: inline-block;
 	min-width: 100px;
 	min-height: inherit;
-	max-width: 100px;
+
+	vertical-align: top;
 
 	-moz-border-radius: 2px;
 	border-radius: 2px;
 	border: 1px solid #87cefa;
+}
+/** end :: generics **/
 
-	vertical-align: top;
+/** begin :: horizontal view **/
+#studyView element .horizontal {
+	/** empty for now **/
 }
 /** end :: horizontal view **/
 
 /** begin :: vertical view **/
+#studyView element .vertical {
+	white-space: normal;
+	max-width: 752px;
+}
 #studyView element description {
 	display: inline-block;
 	vertical-align: top;
@@ -86,20 +89,9 @@
 	width: 200px;
 	color: #006dba;
 }
-
-#studyView element value {
-	display: inline-block;
-	white-space: normal;
-	min-width: 100px;
-	min-height: inherit;
-	max-width: 752px;
-
-	-moz-border-radius: 2px;
-	border-radius: 2px;
-	border: 1px solid #87cefa;
-}
 /** begin :: vertical view **/
 
+/** start :: debug **/
 #studyView element debug {
 	display: inline-block;
 	background-color: #dbf7e2;
@@ -117,3 +109,4 @@
 
 	text-shadow: 0 1px 0px rgba(0, 0, 0, 0.68);
 }
+/** stop :: debug **/
