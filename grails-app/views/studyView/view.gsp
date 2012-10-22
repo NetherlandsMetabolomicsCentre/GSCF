@@ -82,7 +82,7 @@
 				    success: function() {
 					    element.removeClass('updating');
 					    element.css({ 'background-color': '#bbe094' });
-					    element.animate({ 'background-color': '#ffffff' }, 400);
+					    element.animate({ 'background-color': '#f2ffe4' }, 400);
 				    }
 			    });
 		    }

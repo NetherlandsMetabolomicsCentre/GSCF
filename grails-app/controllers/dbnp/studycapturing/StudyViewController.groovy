@@ -81,24 +81,10 @@ class StudyViewController {
 		String uuid = (params.containsKey('identifier')) ? params.get('identifier') : ''
 		List result = []
 
-		def criteria = Study.createCriteria()
-		List studies = criteria.list {
-			and {
-				eq("UUID", uuid)
-				and {
-					or {
-						eq("owner", user)
-						writers {
-							eq("id", user.id)
-						}
-					}
-				}
-			}
-		}
+		// fetch study
+		Study study = Study.findWhere(UUID: uuid)
 
-		// got a
-		if (studies.size()) {
-			Study study = studies[0]
+		if (study && study.canWrite(user)) {
 			study.cleanup = false
 
 			// update field
