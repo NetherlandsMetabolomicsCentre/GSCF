@@ -39,6 +39,27 @@
 
 	transition: all 0.5s ease-in-out 0s;
 }
+#studyView warning {
+	display: inline-block;
+	background-color: #f7dbe0;
+	color: red;
+	width: 80%;
+	margin-left: 10%;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	margin-bottom: 20px;
+	/*text-align: right;*/
+	/*margin-left: -100px;*/
+	/*margin-top: 0px;*/
+	/*min-height: inherit;*/
+
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px dashed red;
+
+	text-shadow: 0 1px 0px rgba(0, 0, 0, 0.68);
+}
 /** end :: generics **/
 
 /** begin :: horizontal view **/
@@ -81,8 +102,8 @@
 
 #studyView element debug {
 	display: inline-block;
-	background-color: #ffb6c1;
-	color: red;
+	background-color: #dbf7e2;
+	color: #799c4b;
 	float: right;
 	width: 75px;
 	text-align: right;
@@ -92,7 +113,7 @@
 
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-	border: 1px dashed red;
+	border: 1px dashed #799c4b;
 
 	text-shadow: 0 1px 0px rgba(0, 0, 0, 0.68);
 }

@@ -31,7 +31,10 @@ class Study extends TemplateEntity {
 	boolean publicstudy = false  // Determines whether anonymous users are allowed to see this study. This has only effect when published = true
 
     // 20120625: published default to true
-    boolean published = true // Determines whether a study is private (only accessable by the owner and writers) or published (also visible to readers)
+    boolean published = true    // Determines whether a study is private (only accessable by the owner and writers) or published (also visible to readers)
+
+	// when cleanup is set to true, a quartz job will delete this job after X days of age
+	boolean cleanup = false     // see RemoveExpiredStudiesJob.groovy
 
 	static hasMany = [
 		subjects: Subject,
@@ -52,7 +55,7 @@ class Study extends TemplateEntity {
 		title(nullable:false, blank: false, unique:true, maxSize: 255)
 		owner(nullable: true, blank: true)
 		code(nullable: true, blank: true, unique: true, maxSize: 255, matches: "[^ ]+")
-		persons(size:1..1000)
+		persons(size:0..1000)
 		// TODO: add custom validator for 'published' to assess whether the study meets all quality criteria for publication
 		// tested by SampleTests.testStudyPublish
 	}

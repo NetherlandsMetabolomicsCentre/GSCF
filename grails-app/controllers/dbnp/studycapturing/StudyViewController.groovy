@@ -52,8 +52,15 @@ class StudyViewController {
 
 	def ajaxDetails = {
 		SecUser user = authenticationService.getLoggedInUser()
+		Integer cleanupInDays = RemoveExpiredStudiesJob.studyExpiry
 		studyViewService.wrap(params, { study, summary ->
-			render(view: "elements/details", model: [study: study, summary: summary, canRead: study.canRead(user), canWrite: study.canWrite(user)])
+			render(view: "elements/details", model: [
+					study: study,
+					summary: summary,
+					canRead: study.canRead(user),
+					canWrite: study.canWrite(user),
+					cleanupInDays: cleanupInDays
+			])
 		})
 	}
 

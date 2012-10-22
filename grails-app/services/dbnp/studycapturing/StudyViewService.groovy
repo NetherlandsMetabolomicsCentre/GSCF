@@ -56,6 +56,26 @@ class StudyViewService {
 		    // create a new study with this user as owner
 		    study = new Study()
 		    study.owner = user
+		    study.cleanup = true
+		    study.description = "Study description by ${user.email}"
+		    study.startDate = new Date()
+
+			// make sure the title is unique
+		    String title = "New study by ${user.username}"
+			Integer count = 0
+
+			study.title = title
+		    while (!study.validate()) {
+				count++
+			    study.title = "${title} #${count}"
+			}
+
+		    if (!study.save()) {
+			    log.error "Could not create a new study on demand. Did the Study domain change?"
+			    study.errors.each { error ->
+				    log.error error
+			    }
+		    }
 	    }
 
 		return study
