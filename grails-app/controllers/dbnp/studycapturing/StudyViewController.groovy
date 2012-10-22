@@ -131,6 +131,7 @@ class StudyViewController {
 		String name = (params.containsKey('name')) ? params.get('name') : ''
 		String value = (params.containsKey('value')) ? params.get('value') : ''
 		String uuid = (params.containsKey('identifier')) ? params.get('identifier') : ''
+		Map result = [:]
 
 		Subject subject = Subject.findWhere(UUID: uuid)
 		if (subject) {
@@ -146,15 +147,15 @@ class StudyViewController {
 					} else {
 						response.status = 409
 						result = [
-								error: message(error: study.errors.getFieldError(name)),
-								rejectedValue: study.errors.getFieldError(name).rejectedValue
+								error: message(error: subject.errors.getFieldError(name)),
+								rejectedValue: subject.errors.getFieldError(name).rejectedValue
 						]
 					}
 				} else {
 					response.status = 412
 					result = [
-							error: message(error: study.errors.getFieldError(name)),
-							rejectedValue: study.errors.getFieldError(name).rejectedValue
+							error: message(error: subject.errors.getFieldError(name)),
+							rejectedValue: subject.errors.getFieldError(name).rejectedValue
 					]
 				}
 			} else {
@@ -163,8 +164,6 @@ class StudyViewController {
 		} else {
 			response.status = 401
 		}
-
-		def result = []
 
 		// set output headers
 		response.contentType = 'application/json;charset=UTF-8'
