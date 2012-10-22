@@ -1,1 +1,1 @@
-${value}
+<value class="${css}">[stringlist:${value}]</value>

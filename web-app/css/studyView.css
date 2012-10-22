@@ -73,6 +73,8 @@
 /** begin :: horizontal view **/
 #studyView element .horizontal {
 	/** empty for now **/
+	overflow: hidden;
+	max-width: 100px;
 }
 /** end :: horizontal view **/
 

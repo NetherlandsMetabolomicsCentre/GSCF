@@ -1,1 +1,1 @@
-${value}
+<value class="${css}">[term:${value}]</value>
