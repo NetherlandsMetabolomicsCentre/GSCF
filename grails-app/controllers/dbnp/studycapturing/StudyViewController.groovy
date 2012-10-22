@@ -79,7 +79,7 @@ class StudyViewController {
 		String name = (params.containsKey('name')) ? params.get('name') : ''
 		String value = (params.containsKey('value')) ? params.get('value') : ''
 		String uuid = (params.containsKey('identifier')) ? params.get('identifier') : ''
-		List result = []
+		Map result = [:]
 
 		// fetch study
 		Study study = Study.findWhere(UUID: uuid)
@@ -96,16 +96,23 @@ class StudyViewController {
 					response.status = 200
 				} else {
 					response.status = 409
+
+					result = [
+							error: message(error: study.errors.getFieldError(name)),
+							rejectedValue: study.errors.getFieldError(name).rejectedValue
+					]
 				}
 			} else {
 				response.status = 412
+
+				result = [
+				        error: message(error: study.errors.getFieldError(name)),
+						rejectedValue: study.errors.getFieldError(name).rejectedValue
+				]
 			}
 		} else {
 			response.status = 401
 		}
-
-		// todo...
-		result = []
 
 		// set output headers
 		response.contentType = 'application/json;charset=UTF-8'
@@ -138,9 +145,17 @@ class StudyViewController {
 						response.status = 200
 					} else {
 						response.status = 409
+						result = [
+								error: message(error: study.errors.getFieldError(name)),
+								rejectedValue: study.errors.getFieldError(name).rejectedValue
+						]
 					}
 				} else {
 					response.status = 412
+					result = [
+							error: message(error: study.errors.getFieldError(name)),
+							rejectedValue: study.errors.getFieldError(name).rejectedValue
+					]
 				}
 			} else {
 				response.status = 401

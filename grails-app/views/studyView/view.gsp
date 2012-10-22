@@ -2,6 +2,8 @@
 <head>
     <meta name="layout" content="main"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'studyView.css')}"/>
+	<link rel="stylesheet" href="${resource(dir: 'css', file: 'tipTip.css')}"/>
+	<script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.tipTip.minified.js')}"></script>
     <script type="text/javascript">
 	    var canRead = ${canRead};
 	    var canWrite = ${canWrite};
@@ -68,16 +70,18 @@
 			    // perform ajax call
 			    $.ajax({
 				    url:"<g:resource/>/studyView/ajaxUpdate" + entityType,
-				    context:document.body,
+				    dataType: "json",
+				    context: document.body,
 				    data: {
 					    identifier: identifier,
 					    name: name,
 					    value: newValue
 				    },
-				    error: function() {
+				    error: function(msg) {
 					    element.removeClass('updating');
 					    element.css({ 'background-color': '#e8503e' });
 					    element.animate({ 'background-color': '#fee8e5' }, 400);
+					    element.tipTip({content: msg.responseText});
 				    },
 				    success: function() {
 					    element.removeClass('updating');
