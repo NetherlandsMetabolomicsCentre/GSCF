@@ -3,7 +3,7 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 /**
  * Application Configuration
  *
- * @author Jeroen Wesbeek 
+ * @author Jeroen Wesbeek
  * @since 20100520
  *
  * Revision information:
@@ -144,8 +144,10 @@ grails.plugins.springsecurity.controllerAnnotations.staticRules = [
 // The directory should be writable by the webserver user
 if (grails.util.GrailsUtil.environment == GrailsApplication.ENV_TEST) {
     uploads.uploadDir = "webtestfiles"
+    uploads.storageDir = "storagetestfiles"
 } else {
-    uploads.uploadDir = (new File("/tmp")?.canWrite()) ? "/tmp" : "fileuploads"    
+    uploads.uploadDir = (new File("/tmp/fileuploads")?.canWrite()) ? "/tmp/fileuploads" : "fileuploads"
+    uploads.storageDir = (new File("/tmp/filestorage")?.canWrite()) ? "/tmp/filestorage" : "filestorage"
 }
 
 // Required configuration variables for gdtImporter plugin
@@ -166,5 +168,5 @@ trackr.prefix = "gscf.${grails.util.GrailsUtil.environment}."
 
 // ****** TemplateAdmin Config ******
 // Set the email where template(field) requests will be sent to.
-templateadmin.email = "martien.caspers@tno.nl"
+templateadmin.email = "me@example.com"
 
