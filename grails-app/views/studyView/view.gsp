@@ -13,7 +13,34 @@
 			    var t = $(this);
 			    if (event.type == "mouseenter" || event.type == "mouseleave") {
 				    t.toggleClass('highlight');
-			    } else if (event.type == 'focusin' || event.type == "focusout") {
+			    } else if (event.type == 'focusin') {
+					// start editting class
+				    t.toggleClass('editting');
+
+				    // handle tabbed scrolling
+				    var p   = t.parent();                   // row element
+				    var sl  = p.prop('scrollLeft');         // scroll position of this row
+				    var pp  = p.parent()                    // block element enclosing the rows
+				    // remembered scroll position of all rows in this block
+				    var cl  = jQuery.data(pp[0], 'data') ? jQuery.data(pp[0], 'data').left : 0;
+
+				    // do we need to handle scrolling?
+				    if (sl != cl) {
+					    // yes, the row has scrolled and we need to scroll the
+					    // other rows as well. Iterate through other rows
+					    pp.children().each(function () {
+						    // scroll row to the new position
+						    var e = $(this);
+						    if (e[0] != p[0]) e.prop('scrollLeft', sl);
+					    });
+				    }
+
+					// remember current scroll position in order of being able to compare
+				    // to the scroll position (sl) of the row to determine if we need to
+				    // change the scroll position of all rows or not (to save resources)
+				    jQuery.data(pp[0], 'data', { left: sl });
+			    } else if (event.type == "focusout") {
+				    // stop editting
 				    t.toggleClass('editting');
 			    }
 		    });
