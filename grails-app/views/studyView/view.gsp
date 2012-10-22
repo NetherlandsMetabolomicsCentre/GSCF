@@ -17,6 +17,9 @@
 					// start editting class
 				    t.toggleClass('editting');
 
+				    // remember current value
+				    jQuery.data(t[0], 'data', { previousValue: t.html() });
+
 				    // handle tabbed scrolling
 				    var p   = t.parent();                   // row element
 				    var sl  = p.prop('scrollLeft');         // scroll position of this row
@@ -42,8 +45,47 @@
 			    } else if (event.type == "focusout") {
 				    // stop editting
 				    t.toggleClass('editting');
+
+				    var previousData    = jQuery.data(t[0], 'data');
+				    var previousValue   = (previousData) ? previousData.previousValue : null;
+				    var newValue        = t.html();
+
+				    // did the value change?
+				    if (!previousData || (previousData && newValue != previousValue)) {
+					    var identifier  = t.parent().attr('identifier');
+					    var entityType  = t.parent().attr('type');
+						var name        = t.attr('name')
+
+				        updateValue(t, entityType, identifier, name, newValue);
+				    }
 			    }
 		    });
+
+		    function updateValue(element, entityType, identifier, name, newValue) {
+				console.log('ajax update a '+entityType+' with uuid:'+identifier+', name:'+name+', value:'+newValue);
+			    element.addClass('updating');
+
+			    // perform ajax call
+			    $.ajax({
+				    url:"<g:resource/>/studyView/ajaxUpdate" + entityType,
+				    context:document.body,
+				    data: {
+					    identifier: identifier,
+					    name: name,
+					    value: newValue
+				    },
+				    error: function() {
+					    element.removeClass('updating');
+					    element.css({ 'background-color': '#e8503e' });
+					    element.animate({ 'background-color': '#fee8e5' }, 400);
+				    },
+				    success: function() {
+					    element.removeClass('updating');
+					    element.css({ 'background-color': '#bbe094' });
+					    element.animate({ 'background-color': '#ffffff' }, 400);
+				    }
+			    });
+		    }
 		    </g:if>
 
 		    // populate all elements
