@@ -6,6 +6,7 @@
 	<g:render template="types/${fieldType}" model="['entity':entity, 'field':field, 'value': entity.getFieldValue(field.name), 'css': 'vertical', 'canRead': canRead, 'canWrite': canWrite]" />
 
 	<debug>
+		<g:if test="${field.required}"><b>* </g:if>
 		${fieldType}
 	</debug>
 </element>

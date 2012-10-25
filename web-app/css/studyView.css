@@ -40,6 +40,7 @@
 
 	transition: all 0.3s ease-in-out 0s;
 }
+
 #studyView element .editting {
 	-moz-border-radius: 5px;
 	border-radius: 5px;
@@ -47,6 +48,22 @@
 
 	transition: all 0.5s ease-in-out 0s;
 }
+
+#studyView element input, textarea {
+	border: none;
+	font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: 100;
+	letter-spacing: 1px;
+	background-color: transparent;
+
+}
+
+#studyView element textarea {
+	width: 400px;
+	height: 40px;
+}
+
 #studyView warning {
 	display: inline-block;
 	background-color: #f7dbe0;

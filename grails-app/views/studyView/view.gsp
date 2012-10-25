@@ -12,20 +12,22 @@
 		    <g:if test="${canWrite}">
 		    // (current and future) event handlers
 		    $(document).on('hover blur focus', '.editable', function(event) {
-			    var t = $(this);
+			    var t = $(this);        // input element
+			    var p = t.parent();     // value element
+			    var r   = p.parent();   // row element
+			    var pp  = r.parent();   // block element enclosing the rows
+
 			    if (event.type == "mouseenter" || event.type == "mouseleave") {
-				    t.toggleClass('highlight');
+				    p.toggleClass('highlight');
 			    } else if (event.type == 'focusin') {
 					// start editting class
-				    t.toggleClass('editting');
+				    p.toggleClass('editting');
 
 				    // remember current value
-				    jQuery.data(t[0], 'data', { previousValue: t.html() });
+				    jQuery.data(t[0], 'data', { previousValue: t.val().trim() });
 
 				    // handle tabbed scrolling
-				    var p   = t.parent();                   // row element
-				    var sl  = p.prop('scrollLeft');         // scroll position of this row
-				    var pp  = p.parent();                   // block element enclosing the rows
+				    var sl  = r.prop('scrollLeft');         // scroll position of this row
 				    // remembered scroll position of all rows in this block
 				    var cl  = jQuery.data(pp[0], 'data') ? jQuery.data(pp[0], 'data').left : 0;
 
@@ -46,16 +48,16 @@
 				    jQuery.data(pp[0], 'data', { left: sl });
 			    } else if (event.type == "focusout") {
 				    // stop editting
-				    t.toggleClass('editting');
+				    p.toggleClass('editting');
 
 				    var previousData    = jQuery.data(t[0], 'data');
 				    var previousValue   = (previousData) ? previousData.previousValue : null;
-				    var newValue        = t.html();
+				    var newValue        = t.val().trim();
 
 				    // did the value change?
 				    if (!previousData || (previousData && newValue != previousValue)) {
-					    var identifier  = t.parent().attr('identifier');
-					    var entityType  = t.parent().attr('type');
+					    var identifier  = t.parent().parent().attr('identifier');
+					    var entityType  = t.parent().parent().attr('type');
 						var name        = t.attr('name')
 
 				        updateValue(t, entityType, identifier, name, newValue);
@@ -65,7 +67,8 @@
 
 		    function updateValue(element, entityType, identifier, name, newValue) {
 				console.log('ajax update a '+entityType+' with uuid:'+identifier+', name:'+name+', value:'+newValue);
-			    element.addClass('updating');
+			    var parentElement = element.parent();
+			    parentElement.addClass('updating');
 
 			    // perform ajax call
 			    $.ajax({
@@ -79,18 +82,18 @@
 				    },
 				    error: function(msg) {
 					    var obj = jQuery.parseJSON(msg.responseText);
-					    element.removeClass('updating');
-					    element.css({ 'background-color': '#e8503e' });
-					    element.animate({ 'background-color': '#fee8e5' }, 400);
-					    element.tipTip({
+					    parentElement.removeClass('updating');
+					    parentElement.css({ 'background-color': '#e8503e' });
+					    parentElement.animate({ 'background-color': '#fee8e5' }, 400);
+					    parentElement.tipTip({
 						    content: obj.error
 					    });
 				    },
 				    success: function() {
 					    console.log('unbind tiptip! tipTip does not yet support this, so we need to hack it... TODO');
-					    element.removeClass('updating');
-					    element.css({ 'background-color': '#bbe094' });
-					    element.animate({ 'background-color': '#f2ffe4' }, 400);
+					    parentElement.removeClass('updating');
+					    parentElement.css({ 'background-color': '#bbe094' });
+					    parentElement.animate({ 'background-color': '#f2ffe4' }, 400);
 				    }
 			    });
 		    }
