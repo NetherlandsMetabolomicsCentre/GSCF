@@ -22,7 +22,7 @@
 				    p.toggleClass('highlight');
 			    } else if (event.type == 'focusin') {
 					// start editting class
-				    p.toggleClass('editting');
+				    p.addClass('editting');
 
 				    // remember current value
 				    jQuery.data(t[0], 'data', { previousValue: t.val().trim() });
@@ -63,7 +63,7 @@
 				    }
 			    } else if (event.type == "focusout" || (event.type == 'change' && t.attr('type') == 'checkbox')) {
 				    // stop editting
-				    p.toggleClass('editting');
+				    p.removeClass('editting');
 
 				    var previousData    = jQuery.data(t[0], 'data');
 				    var previousValue   = (previousData) ? previousData.previousValue : null;
@@ -83,12 +83,17 @@
 
 		    function handleDateField(element) {
 			    element.datepicker({
-				    duration: '',
+				    duration: 500,
 				    showTime: false,
 				    constrainInput:false,
 				    dateFormat: 'dd/mm/yy',
+				    onSelect: function() {
+					    // focus the next element
+					    focusNextElement(element);
+				    },
 				    onClose: function() {
-					    element.blur();
+					    // remove date picker
+					    element.datepicker("destroy");
 				    }
 			    }, 'dd/mm/yy', element.val());
 		    }
@@ -110,23 +115,31 @@
 					if (event.keyCode == 13) {
 						// unbind event handler and blur input element
 						element.unbind('keyup');
-						element.blur();
-
-						// find next input element and focus it
-						var nextElement = $('.editable', element.parent().next());
-						if (nextElement.length != 1) {
-							nextElement = $('.editable', element.parent().parent().next());
-						}
-						nextElement.focus();
-
-						// and move the cursor to the end (and ignore trailing spaces)
-						var v = nextElement.val();
-						if (v) {
-							var c = v.replace(/ *$/, '').length;
-							nextElement[0].setSelectionRange(c, c);
-						}
+						var nextElement = focusNextElement(element);
+						moveCursorToEnd(nextElement);
 					}
 				});
+		    }
+
+		    function focusNextElement(element) {
+			    element.blur();
+
+			    // find next input element and focus it
+			    var nextElement = $('.editable', element.parent().next());
+			    if (nextElement.length != 1) {
+				    nextElement = $('.editable', element.parent().parent().next());
+			    }
+			    nextElement.focus();
+
+			    return nextElement;
+		    }
+
+		    function moveCursorToEnd(element) {
+			    var v = element.val();
+			    if (v) {
+				    var c = v.replace(/ *$/, '').length;
+				    element[0].setSelectionRange(c, c);
+			    }
 		    }
 
 		    function updateValue(element, entityType, identifier, name, newValue) {
