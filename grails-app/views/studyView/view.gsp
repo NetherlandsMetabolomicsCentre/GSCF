@@ -46,6 +46,11 @@
 				    // to the scroll position (sl) of the row to determine if we need to
 				    // change the scroll position of all rows or not (to save resources)
 				    jQuery.data(pp[0], 'data', { left: sl });
+
+				    // handle special types
+				    if (t.attr('type') == 'date') {
+					    handleDateField(t);
+				    }
 			    } else if (event.type == "focusout") {
 				    // stop editting
 				    p.toggleClass('editting');
@@ -58,12 +63,26 @@
 				    if (!previousData || (previousData && newValue != previousValue)) {
 					    var identifier  = t.parent().parent().attr('identifier');
 					    var entityType  = t.parent().parent().attr('type');
-						var name        = t.attr('name')
+					    var name        = t.attr('name');
 
-				        updateValue(t, entityType, identifier, name, newValue);
+					    updateValue(t, entityType, identifier, name, newValue);
 				    }
 			    }
 		    });
+
+		    function handleDateField(element) {
+			    console.log(element.val());
+			    element.datepicker({
+				    duration: '',
+				    showTime: false,
+				    constrainInput:false,
+				    dateFormat: 'dd/mm/yy',
+				    onClose: function() {
+					    console.log('closseeeee');
+					    element.blur();
+				    }
+			    }, 'dd/mm/yy', element.val());
+		    }
 
 		    function updateValue(element, entityType, identifier, name, newValue) {
 				console.log('ajax update a '+entityType+' with uuid:'+identifier+', name:'+name+', value:'+newValue);
