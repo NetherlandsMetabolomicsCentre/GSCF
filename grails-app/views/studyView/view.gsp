@@ -25,7 +25,7 @@
 				    // handle tabbed scrolling
 				    var p   = t.parent();                   // row element
 				    var sl  = p.prop('scrollLeft');         // scroll position of this row
-				    var pp  = p.parent()                    // block element enclosing the rows
+				    var pp  = p.parent();                   // block element enclosing the rows
 				    // remembered scroll position of all rows in this block
 				    var cl  = jQuery.data(pp[0], 'data') ? jQuery.data(pp[0], 'data').left : 0;
 
@@ -78,12 +78,16 @@
 					    value: newValue
 				    },
 				    error: function(msg) {
+					    var obj = jQuery.parseJSON(msg.responseText);
 					    element.removeClass('updating');
 					    element.css({ 'background-color': '#e8503e' });
 					    element.animate({ 'background-color': '#fee8e5' }, 400);
-					    element.tipTip({content: msg.responseText});
+					    element.tipTip({
+						    content: obj.error
+					    });
 				    },
 				    success: function() {
+					    console.log('unbind tiptip! tipTip does not yet support this, so we need to hack it... TODO');
 					    element.removeClass('updating');
 					    element.css({ 'background-color': '#bbe094' });
 					    element.animate({ 'background-color': '#f2ffe4' }, 400);
