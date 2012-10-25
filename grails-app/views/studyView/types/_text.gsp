@@ -1,7 +1,11 @@
 <g:if test="${canWrite}">
-	%{--<value contenteditable="true" class="editable ${css}" name="${field.name}">${value}</value>--}%
 	<value class="${css}">
-		<textarea name="${field.name}" class="editable" required="${field.required}">${value}</textarea>
+		<g:if test="${horizontal}">
+			<input type="text" name="${field.name}" class="editable" required="${field.required}" value="${value}"/>
+		</g:if>
+		<g:else>
+			<textarea name="${field.name}" class="editable" required="${field.required}">${value}</textarea>
+		</g:else>
 	</value>
 </g:if>
 <g:else>
