@@ -1,4 +1,4 @@
-<g:if test="${!canWrite}">
+<g:if test="${canWrite}">
 <value class="${css}">
 	<g:if test="${value}">
 		<input type="checkbox" name="name" class="editable" checked />
