@@ -1,6 +1,6 @@
 <g:if test="${canWrite}">
 	%{--<value contenteditable="true" class="editable ${css}" name="${field.name}">${value}</value>--}%
-	<value contenteditable="true" class="${css}">
+	<value class="${css}">
 		<textarea name="${field.name}" class="editable" required="${field.required}">${value}</textarea>
 	</value>
 </g:if>

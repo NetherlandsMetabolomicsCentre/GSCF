@@ -97,18 +97,38 @@ class StudyViewController {
 				} else {
 					response.status = 409
 
+					def error = study.errors.getFieldError(name)
+					String fieldType    = study.giveFieldType(name).toString().toLowerCase()
+					String errorMessage = (error) ? g.message(error: error) : g.message(code: "templateEntity.typeMismatch.${fieldType}", args: [name, value])
+					String rejectedValue= (error) ? error?.rejectedValue : value
+
 					result = [
-							error: message(error: study.errors.getFieldError(name)),
-							rejectedValue: study.errors.getFieldError(name).rejectedValue
+							error: errorMessage,
+							rejectedValue: rejectedValue
 					]
+
+//					result = [
+//							error: message(error: study.errors.getFieldError(name)),
+//							rejectedValue: study.errors.getFieldError(name)?.rejectedValue
+//					]
 				}
 			} else {
 				response.status = 412
 
+				def error = study.errors.getFieldError(name)
+				String fieldType    = study.giveFieldType(name).toString().toLowerCase()
+				String errorMessage = (error) ? g.message(error: error) : g.message(code: "templateEntity.typeMismatch.${fieldType}", args: [name, value])
+				String rejectedValue= (error) ? error?.rejectedValue : value
+
 				result = [
-				        error: message(error: study.errors.getFieldError(name)),
-						rejectedValue: study.errors.getFieldError(name).rejectedValue
+						error: errorMessage,
+						rejectedValue: rejectedValue
 				]
+
+//				result = [
+//				        error: message(error: study.errors.getFieldError(name)),
+//						rejectedValue: study.errors.getFieldError(name)?.rejectedValue
+//				]
 			}
 		} else {
 			response.status = 401
@@ -146,16 +166,28 @@ class StudyViewController {
 						response.status = 200
 					} else {
 						response.status = 409
+
+						def error = subject.errors.getFieldError(name)
+						String fieldType    = subject.giveFieldType(name).toString().toLowerCase()
+						String errorMessage = (error) ? g.message(error: error) : g.message(code: "templateEntity.typeMismatch.${fieldType}", args: [name, value])
+						String rejectedValue= (error) ? error?.rejectedValue : value
+
 						result = [
-								error: message(error: subject.errors.getFieldError(name)),
-								rejectedValue: subject.errors.getFieldError(name).rejectedValue
+								error: errorMessage,
+								rejectedValue: rejectedValue
 						]
 					}
 				} else {
 					response.status = 412
+
+					def error = subject.errors.getFieldError(name)
+					String fieldType    = subject.giveFieldType(name).toString().toLowerCase()
+					String errorMessage = (error) ? g.message(error: error) : g.message(code: "templateEntity.typeMismatch.${fieldType}", args: [name, value])
+					String rejectedValue= (error) ? error?.rejectedValue : value
+
 					result = [
-							error: message(error: subject.errors.getFieldError(name)),
-							rejectedValue: subject.errors.getFieldError(name).rejectedValue
+							error: errorMessage,
+							rejectedValue: rejectedValue
 					]
 				}
 			} else {
