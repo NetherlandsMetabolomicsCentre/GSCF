@@ -49,14 +49,13 @@
 	transition: all 0.5s ease-in-out 0s;
 }
 
-#studyView element input, textarea {
+#studyView element input, #studyView element textarea {
 	border: none;
 	font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', Arial, Helvetica, sans-serif;
 	font-size: 10pt;
 	font-weight: 100;
 	letter-spacing: 1px;
 	background-color: transparent;
-
 }
 
 #studyView element textarea {
@@ -96,7 +95,7 @@
 /** end :: generics **/
 
 /** begin :: horizontal view **/
-#studyView element .horizontal {
+#studyView element .horizontal, #studyView element .horizontal input {
 	/** empty for now **/
 	overflow: hidden;
 	max-width: 100px;

@@ -1,10 +1,10 @@
 <g:if test="${canWrite}">
 <value class="${css}">
 	<g:if test="${value}">
-		<input type="checkbox" name="name" class="editable" checked />
+		<input type="checkbox" name="${field.name}" class="editable" checked />
 	</g:if>
 	<g:else>
-		<input type="checkbox" name="name" class="editable" />
+		<input type="checkbox" name="${field.name}" class="editable" />
 	</g:else>
 </value>
 </g:if>

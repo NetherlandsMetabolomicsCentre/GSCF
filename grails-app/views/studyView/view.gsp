@@ -11,11 +11,12 @@
 	    $('document').ready(function () {
 		    <g:if test="${canWrite}">
 		    // (current and future) event handlers
-		    $(document).on('hover blur focus', '.editable', function(event) {
+		    $(document).on('hover blur focus change', '.editable', function(event) {
 			    var t = $(this);        // input element
 			    var p = t.parent();     // value element
 			    var r   = p.parent();   // row element
 			    var pp  = r.parent();   // block element enclosing the rows
+			    var entityType  = t.parent().parent().attr('type');
 
 			    if (event.type == "mouseenter" || event.type == "mouseleave") {
 				    p.toggleClass('highlight');
@@ -47,23 +48,25 @@
 				    // change the scroll position of all rows or not (to save resources)
 				    jQuery.data(pp[0], 'data', { left: sl });
 
-				    // handle special types
-				    if (t.attr('type') == 'date') {
-					    handleDateField(t);
+				    switch (t.attr('type')) {
+					    case 'date':
+						    handleDateField(t);
+						    break;
 				    }
-			    } else if (event.type == "focusout") {
+			    } else if (event.type == "focusout" || (event.type == 'change' && t.attr('type') == 'checkbox')) {
 				    // stop editting
 				    p.toggleClass('editting');
 
 				    var previousData    = jQuery.data(t[0], 'data');
 				    var previousValue   = (previousData) ? previousData.previousValue : null;
-				    var newValue        = t.val().trim();
+				    var newValue        = (t.attr('type') == 'checkbox') ? t.is(':checked') : t.val().trim();
 
 				    // did the value change?
 				    if (!previousData || (previousData && newValue != previousValue)) {
 					    var identifier  = t.parent().parent().attr('identifier');
-					    var entityType  = t.parent().parent().attr('type');
 					    var name        = t.attr('name');
+
+					    console.log(t.attr('name') + ' :: ' + previousValue + ' > ' + newValue);
 
 					    updateValue(t, entityType, identifier, name, newValue);
 				    }
@@ -71,14 +74,12 @@
 		    });
 
 		    function handleDateField(element) {
-			    console.log(element.val());
 			    element.datepicker({
 				    duration: '',
 				    showTime: false,
 				    constrainInput:false,
 				    dateFormat: 'dd/mm/yy',
 				    onClose: function() {
-					    console.log('closseeeee');
 					    element.blur();
 				    }
 			    }, 'dd/mm/yy', element.val());
