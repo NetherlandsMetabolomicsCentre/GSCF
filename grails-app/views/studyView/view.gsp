@@ -52,6 +52,14 @@
 					    case 'date':
 						    handleDateField(t);
 						    break;
+					    case 'text':
+						    handleTextField(t);
+						    break;
+					    case 'number':
+						    handleNumberField(t);
+					    default:
+							console.log('no special stuff for ' + t.attr('type'));
+						    break;
 				    }
 			    } else if (event.type == "focusout" || (event.type == 'change' && t.attr('type') == 'checkbox')) {
 				    // stop editting
@@ -66,7 +74,7 @@
 					    var identifier  = t.parent().parent().attr('identifier');
 					    var name        = t.attr('name');
 
-					    console.log(t.attr('name') + ' :: ' + previousValue + ' > ' + newValue);
+//console.log(t.attr('name') + ' :: ' + previousValue + ' > ' + newValue);
 
 					    updateValue(t, entityType, identifier, name, newValue);
 				    }
@@ -85,8 +93,44 @@
 			    }, 'dd/mm/yy', element.val());
 		    }
 
+		    function handleTextField(element) {
+			    blurOnEnter(element);
+		    }
+
+		    function handleNumberField(element) {
+			    blurOnEnter(element);
+		    }
+
+		    /**
+		     * Skip to the next input field if an enter key is pressed
+		     * @param element
+		     */
+		    function blurOnEnter(element) {
+				element.bind('keyup',function(event) {
+					if (event.keyCode == 13) {
+						// unbind event handler and blur input element
+						element.unbind('keyup');
+						element.blur();
+
+						// find next input element and focus it
+						var nextElement = $('.editable', element.parent().next());
+						if (nextElement.length != 1) {
+							nextElement = $('.editable', element.parent().parent().next());
+						}
+						nextElement.focus();
+
+						// and move the cursor to the end (and ignore trailing spaces)
+						var v = nextElement.val();
+						if (v) {
+							var c = v.replace(/ *$/, '').length;
+							nextElement[0].setSelectionRange(c, c);
+						}
+					}
+				});
+		    }
+
 		    function updateValue(element, entityType, identifier, name, newValue) {
-				console.log('ajax update a '+entityType+' with uuid:'+identifier+', name:'+name+', value:'+newValue);
+//console.log('ajax update a '+entityType+' with uuid:'+identifier+', name:'+name+', value:'+newValue);
 			    var parentElement = element.parent();
 			    parentElement.addClass('updating');
 
@@ -102,15 +146,25 @@
 				    },
 				    error: function(msg) {
 					    var obj = jQuery.parseJSON(msg.responseText);
+
+					    // remove previous tooltip
+					    parentElement.unbind('hover');
+
+						// animate
 					    parentElement.removeClass('updating');
 					    parentElement.css({ 'background-color': '#e8503e' });
 					    parentElement.animate({ 'background-color': '#fee8e5' }, 400);
+
+						// add error message tooltip
 					    parentElement.tipTip({
 						    content: obj.error
 					    });
 				    },
 				    success: function() {
-					    console.log('unbind tiptip! tipTip does not yet support this, so we need to hack it... TODO');
+					    // remove previous tooltip
+					    parentElement.unbind('hover');
+
+						// animate
 					    parentElement.removeClass('updating');
 					    parentElement.css({ 'background-color': '#bbe094' });
 					    parentElement.animate({ 'background-color': '#f2ffe4' }, 400);
