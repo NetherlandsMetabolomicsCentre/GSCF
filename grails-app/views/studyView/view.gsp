@@ -57,6 +57,10 @@
 						    break;
 					    case 'number':
 						    handleNumberField(t);
+						    break;
+					    case 'stringlist':
+						    handleStringListField(t);
+						    break;
 					    default:
 							console.log('no special stuff for ' + t.attr('type'));
 						    break;
@@ -104,6 +108,11 @@
 
 		    function handleNumberField(element) {
 			    blurOnEnter(element);
+		    }
+
+		    function handleStringListField(element) {
+			    // open stringlist options
+
 		    }
 
 		    /**
