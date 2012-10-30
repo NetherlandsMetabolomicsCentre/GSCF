@@ -68,6 +68,7 @@
 						    break;
 					    default:
 							console.log('no special stuff for ' + t.attr('type'));
+							console.log(t);
 						    break;
 				    }
 			    } else if (event.type == "focusout" || (event.type == 'change' && t.attr('type') == 'checkbox')) {
@@ -119,8 +120,7 @@
 		    }
 
 		    function handleStringListField(element) {
-			    // open stringlist options
-
+			    blurOnEnter(element);
 		    }
 
 		    /**
@@ -128,7 +128,7 @@
 		     * @param element
 		     */
 		    function blurOnEnter(element) {
-				element.bind('keyup',function(event) {
+				element.bind('change keyup',function(event) {
 					if (event.keyCode == 13) {
 						// unbind event handler and blur input element
 						element.unbind('keyup');
@@ -209,6 +209,8 @@
 		    }
 
 		    function moveCursorToEnd(element) {
+			    if (element.is('select')) return;
+
 			    var v = element.val();
 			    if (v) {
 				    var c = v.replace(/ *$/, '').length;
