@@ -6,10 +6,13 @@
 package dbnp.studycapturing
 
 import org.dbnp.gdt.TemplateEntity
+import org.dbnp.gdt.Term
 
 class StudyViewTagLib {
 	// define the tag namespace (e.g.: <foo:action ... />
 	static namespace = "sv"
+
+	def studyViewService
 
 	def vertical = { attrs, body ->
 		def entity = (attrs.containsKey('entity') && attrs.get('entity') instanceof TemplateEntity) ? attrs.get('entity') : null
@@ -43,5 +46,18 @@ class StudyViewTagLib {
 				canRead: canRead,
 				canWrite: canWrite
 		])
+	}
+
+	def ontologyterm = { attrs, body ->
+		HashSet ontologies = attrs.get('from')
+		def terms = studyViewService.termsForOntologies(ontologies)
+		attrs.from = terms
+//		attrs.value = Term.findByName(attrs.value)
+
+		println terms
+		println "value: ${attrs.value}"
+
+
+		out << select(attrs)
 	}
 }

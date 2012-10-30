@@ -7,6 +7,7 @@ package dbnp.studycapturing
 
 import dbnp.studycapturing.Study
 import dbnp.authentication.SecUser
+import org.dbnp.gdt.Term
 
 class StudyViewService {
     static transactional = true
@@ -101,5 +102,14 @@ class StudyViewService {
 		} catch (Exception e) {
 			render(view: "errors/exception")
 		}
+	}
+
+	def termsForOntologies(HashSet ontologies) {
+		def terms = []
+		ontologies.each { ontology ->
+			terms += Term.findAllByOntology(ontology)
+		}
+
+		return terms.sort{ it.name }
 	}
 }

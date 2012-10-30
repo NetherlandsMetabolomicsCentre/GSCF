@@ -8,6 +8,8 @@ package dbnp.studycapturing
 
 import dbnp.authentication.SecUser
 import grails.converters.JSON
+import org.dbnp.gdt.TemplateFieldType
+import org.dbnp.gdt.Term
 
 class StudyViewController {
 	def authenticationService
@@ -157,6 +159,13 @@ class StudyViewController {
 		if (subject) {
 			Study study = subject.parent
 			if (study.canWrite(user)) {
+				// do we need to do something special?
+				switch (subject.giveFieldType(name)) {
+					case TemplateFieldType.ONTOLOGYTERM:
+						value = Term.findByName(value)
+						break
+				}
+
 				// update the subject
 				subject.setFieldValue(name, value)
 

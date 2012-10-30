@@ -63,6 +63,12 @@
 	height: 40px;
 }
 
+#studyView element select {
+	font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+	border: none;
+	background-color: transparent;
+}
+
 #studyView warning {
 	display: inline-block;
 	background-color: #f7dbe0;
@@ -100,6 +106,9 @@
 	overflow: hidden;
 	max-width: 100px;
 	max-height: 40px;
+}
+#studyView element .horizontal select {
+	width: 120px;
 }
 /** end :: horizontal view **/
 

@@ -25,7 +25,8 @@
 				    p.addClass('editting');
 
 				    // remember current value
-				    jQuery.data(t[0], 'data', { previousValue: t.val().trim() });
+				    var v = t.val();
+				    jQuery.data(t[0], 'data', { previousValue: (v) ? v.trim() : null });
 
 				    // handle tabbed scrolling
 				    // remembered scroll position of all rows in this block
@@ -77,7 +78,8 @@
 
 				    var previousData    = jQuery.data(t[0], 'data');
 				    var previousValue   = (previousData) ? previousData.previousValue : null;
-				    var newValue        = (t.attr('type') == 'checkbox') ? t.is(':checked') : t.val().trim();
+				    var v = t.val();
+				    var newValue        = (t.attr('type') == 'checkbox') ? t.is(':checked') : ((v) ? v.trim() : null);
 
 				    // did the value change?
 				    if (!previousData || (previousData && newValue != previousValue)) {
