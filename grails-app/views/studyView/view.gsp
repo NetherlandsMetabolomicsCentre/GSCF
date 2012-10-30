@@ -28,9 +28,14 @@
 				    jQuery.data(t[0], 'data', { previousValue: t.val().trim() });
 
 				    // handle tabbed scrolling
-				    var sl  = r.prop('scrollLeft');         // scroll position of this row
 				    // remembered scroll position of all rows in this block
 				    var cl  = jQuery.data(pp[0], 'data') ? jQuery.data(pp[0], 'data').left : 0;
+				    var sl  = (cl == -100) ? 0 : r.scrollLeft();    // scroll position of this row
+
+				    // sometimes the left focus becomes 1 pixels, if so we want it to be zero to
+				    // show the left pixel of the row as well
+				    var toZero = (sl < 10);
+				    if (toZero) sl = 0;
 
 				    // do we need to handle scrolling?
 				    if (sl != cl) {
@@ -39,7 +44,7 @@
 					    pp.children().each(function () {
 						    // scroll row to the new position
 						    var e = $(this);
-						    if (e[0] != p[0]) e.prop('scrollLeft', sl);
+						    if (e[0] != p[0] || toZero) e.scrollLeft(sl);
 					    });
 				    }
 
@@ -86,6 +91,9 @@
 		    });
 
 		    function handleDateField(element) {
+			    blurOnEnter(element);
+
+			    // launch datepicker
 			    element.datepicker({
 				    duration: 500,
 				    showTime: false,
@@ -131,15 +139,72 @@
 		    }
 
 		    function focusNextElement(element) {
+			    var row  = element.parent().parent();
+			    var block = (row.hasClass('horizontal')) ? row : row.parent();
+			    var elements = $('.editable', block);
+				var count = elements.length;
+			    var current = 0;
+			    var nextElement = [];
+
+			    // blur element
 			    element.blur();
 
-			    // find next input element and focus it
-			    var nextElement = $('.editable', element.parent().next());
-			    if (nextElement.length != 1) {
-				    nextElement = $('.editable', element.parent().parent().next());
+				// find current input element
+			    for (var c=0;c<count;c++) {
+				    if (elements[c] == element[0]) {
+					    current = c;
+					    break;
+				    }
 			    }
+
+			    // was this the last input element in this block?
+			    var jumpRow = false;
+			    if (current == (count-1)) {
+				    // yes, get the next block
+				    var nextBlock = block.next();
+				    var check = true;
+				    var ne = false;
+
+				    while (nextBlock.length == 1 && check) {
+					    var elements = $('.editable', nextBlock);
+					    if (elements.length > 0) {
+							ne = $(elements[0]);
+						    jumpRow = true;
+						    check = false;
+					    } else {
+						    nextBlock = nextBlock.next();
+					    }
+				    }
+
+				    // got a next element?
+				    nextElement = (ne) ? ne : element;
+			    } else {
+				    nextElement = $(elements[c+1]);
+			    }
+
+			    // there seems to be an issue where scrollLeft first triggers the onLeft event
+			    // and only updated the scrollLeft value afterwards. This causes the logic unable
+			    // to detect scrolling, and rows get miss aligned.
+			    if (jumpRow) {
+				    // 1. force the cache to expire to make sure the rows get updated:
+				    jQuery.data(block.parent()[0], 'data', { left: -100 });
+			    }
+
+				// is the nextElement in view?
+			    var width = block.width();
+			    var right = nextElement.position().left + nextElement.width() + block.scrollLeft();
+			    var scroll= ((right - width) < 0) ? 0 : (right - width);
+			    var left  = block.scrollLeft();
+			    if (scroll > left) {
+				    // 2. force scroll to make sure that scrollLeft is known in the 'scrollin' event
+				    //    handler when we focus
+				    block.scrollLeft(scroll);
+			    }
+
+			    // 3. focus the next element and trigger the 'focusin' event handler
 			    nextElement.focus();
 
+			    // and return it
 			    return nextElement;
 		    }
 
