@@ -103,16 +103,13 @@ class StudyViewController {
 					String fieldType    = study.giveFieldType(name).toString().toLowerCase()
 					String errorMessage = (error) ? g.message(error: error) : g.message(code: "templateEntity.typeMismatch.${fieldType}", args: [name, value])
 					String rejectedValue= (error) ? error?.rejectedValue : value
+					String comment      = study.getField(name)?.comment
 
 					result = [
 							error: errorMessage,
-							rejectedValue: rejectedValue
+							rejectedValue: rejectedValue,
+							comment: comment
 					]
-
-//					result = [
-//							error: message(error: study.errors.getFieldError(name)),
-//							rejectedValue: study.errors.getFieldError(name)?.rejectedValue
-//					]
 				}
 			} else {
 				response.status = 412
@@ -121,16 +118,13 @@ class StudyViewController {
 				String fieldType    = study.giveFieldType(name).toString().toLowerCase()
 				String errorMessage = (error) ? g.message(error: error) : g.message(code: "templateEntity.typeMismatch.${fieldType}", args: [name, value])
 				String rejectedValue= (error) ? error?.rejectedValue : value
+				String comment      = study.getField(name)?.comment
 
 				result = [
 						error: errorMessage,
-						rejectedValue: rejectedValue
+						rejectedValue: rejectedValue,
+						comment: comment
 				]
-
-//				result = [
-//				        error: message(error: study.errors.getFieldError(name)),
-//						rejectedValue: study.errors.getFieldError(name)?.rejectedValue
-//				]
 			}
 		} else {
 			response.status = 401
@@ -162,7 +156,7 @@ class StudyViewController {
 				// do we need to do something special?
 				switch (subject.giveFieldType(name)) {
 					case TemplateFieldType.ONTOLOGYTERM:
-						value = Term.findByName(value)
+						value = Term.findById(value)
 						break
 				}
 
@@ -180,10 +174,12 @@ class StudyViewController {
 						String fieldType    = subject.giveFieldType(name).toString().toLowerCase()
 						String errorMessage = (error) ? g.message(error: error) : g.message(code: "templateEntity.typeMismatch.${fieldType}", args: [name, value])
 						String rejectedValue= (error) ? error?.rejectedValue : value
+						String comment      = subject.getField(name)?.comment
 
 						result = [
 								error: errorMessage,
-								rejectedValue: rejectedValue
+								rejectedValue: rejectedValue,
+								comment: comment
 						]
 					}
 				} else {
@@ -193,10 +189,12 @@ class StudyViewController {
 					String fieldType    = subject.giveFieldType(name).toString().toLowerCase()
 					String errorMessage = (error) ? g.message(error: error) : g.message(code: "templateEntity.typeMismatch.${fieldType}", args: [name, value])
 					String rejectedValue= (error) ? error?.rejectedValue : value
+					String comment      = subject.getField(name)?.comment
 
 					result = [
 							error: errorMessage,
-							rejectedValue: rejectedValue
+							rejectedValue: rejectedValue,
+							comment: comment
 					]
 				}
 			} else {

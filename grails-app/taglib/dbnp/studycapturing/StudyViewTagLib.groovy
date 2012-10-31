@@ -48,15 +48,25 @@ class StudyViewTagLib {
 		])
 	}
 
+	def header = { attrs, body ->
+		def entity = (attrs.entity instanceof List) ? attrs.entity[0] : attrs.entity
+		String entityType = entity.class.toString().split(/\./).last()
+
+		out << render(template: "common/templateFieldHeaders", model: [
+		        entity: entity,
+				entityType: entityType,
+				fields: entity.giveFields()
+		])
+	}
+
 	def ontologyterm = { attrs, body ->
 		HashSet ontologies = attrs.get('from')
+
 		def terms = studyViewService.termsForOntologies(ontologies)
+
 		attrs.from = terms
-//		attrs.value = Term.findByName(attrs.value)
-
-		println terms
-		println "value: ${attrs.value}"
-
+		attrs.optionKey = "id"
+		attrs.value = attrs.value.id
 
 		out << select(attrs)
 	}

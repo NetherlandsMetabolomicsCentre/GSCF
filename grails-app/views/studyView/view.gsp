@@ -67,12 +67,15 @@
 					    case 'stringlist':
 						    handleStringListField(t);
 						    break;
+					    case 'ontologyterm':
+						    handleOntologyTermField(t);
+						    break;
 					    default:
 							console.log('no special stuff for ' + t.attr('type'));
 							console.log(t);
 						    break;
 				    }
-			    } else if (event.type == "focusout" || (event.type == 'change' && t.attr('type') == 'checkbox')) {
+			    } else if (event.type == "focusout" || (event.type == 'change' && (t.attr('type') == 'checkbox' || t.is('select')))) {
 				    // stop editting
 				    p.removeClass('editting');
 
@@ -85,9 +88,7 @@
 				    if (!previousData || (previousData && newValue != previousValue)) {
 					    var identifier  = t.parent().parent().attr('identifier');
 					    var name        = t.attr('name');
-
 //console.log(t.attr('name') + ' :: ' + previousValue + ' > ' + newValue);
-
 					    updateValue(t, entityType, identifier, name, newValue);
 				    }
 			    }
@@ -125,7 +126,11 @@
 			    blurOnEnter(element);
 		    }
 
-		    /**
+		    function handleOntologyTermField(element) {
+			    blurOnEnter(element);
+		    }
+
+			/**
 		     * Skip to the next input field if an enter key is pressed
 		     * @param element
 		     */
@@ -246,10 +251,14 @@
 					    parentElement.css({ 'background-color': '#e8503e' });
 					    parentElement.animate({ 'background-color': '#fee8e5' }, 400);
 
+					    // define error message
+					    var error = '<error>' + obj.error + '</error>';
+					    if (obj.comment) {
+						    error = error + '<comment>' + obj.comment + '</comment>'
+					    }
+
 						// add error message tooltip
-					    parentElement.tipTip({
-						    content: obj.error
-					    });
+					    parentElement.tipTip({content: error});
 				    },
 				    success: function() {
 					    // remove previous tooltip
@@ -259,6 +268,9 @@
 					    parentElement.removeClass('updating');
 					    parentElement.css({ 'background-color': '#bbe094' });
 					    parentElement.animate({ 'background-color': '#f2ffe4' }, 400);
+
+					    // remember new value
+					    jQuery.data(element[0], 'data', { previousValue: newValue });
 				    }
 			    });
 		    }
@@ -282,6 +294,16 @@
 						    element.removeClass('waitForLoad');
 							element.html(msg);
 						    element.animate({ height: element.prop('scrollHeight') }, 500);
+
+						    // add tooltips to element headers
+						    $('elementheader > value', element).each(function() {
+							    var t = $(this);
+							    var c = t.attr('comment');
+							    if (c) {
+								    t.addClass('tooltip');
+								    t.tipTip({content:c});
+							    }
+						    });
 				});
 		    });
 	    });
