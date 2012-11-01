@@ -19,12 +19,27 @@
 	background: url(../images/spinner.gif) no-repeat right top;
 }
 
-/** REMOVE THIS??? **/
-#studyView .updateOkay {
-	background: #bbe094;
-	border: 10px solid red;
+/** begin :: changed **/
+#studyView changed {
+	display: block;
+	background: url(../images/bluebadge-50x50.png) no-repeat right top;
+	width: 50px;
+	height: 50px;
+	position: absolute;
+	margin-left: 945px;
+	margin-top: -25px;
+	opacity: 0;
 }
-/** REMOVE THIS??? END **/
+
+#studyView changed value {
+	display: block;
+	color: #fff;
+	font-size: 14pt;
+	text-align: center;
+	width: inherit;
+	padding-top: 14px;
+}
+/** end :: changed **/
 
 /** begin :: generics **/
 #studyView element {

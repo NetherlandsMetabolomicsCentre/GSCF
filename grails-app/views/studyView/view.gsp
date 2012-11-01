@@ -10,6 +10,8 @@
 
 	    $('document').ready(function () {
 		    <g:if test="${canWrite}">
+		    var changed = 0;
+
 		    // (current and future) event handlers
 		    $(document).on('hover blur focus change dblclick', '.editable', function(event) {
 			    var t = $(this);        // input element
@@ -28,9 +30,10 @@
 				    var v = t.val();
 				    var previousData    = jQuery.data(t[0], 'data');
 				    var previousValue   = (v) ? v.trim() : null
-				    var revertValue     = (previousData) ? previousData.revertValue : null;
-				    var originalValue   = (previousData && previousData.originalValue) ? previousData.originalValue : v;
-				    jQuery.data(t[0], 'data', { revertValue: revertValue, previousValue: previousValue, originalValue: originalValue });
+				    var revertValue     = (previousData && "revertValue" in previousData) ? previousData.revertValue : null;
+				    var originalValue   = (previousData && "originalValue" in previousData) ? previousData.originalValue : ((t.attr('type') == 'checkbox') ? !newValue : v);
+				    var changed         = (previousData && "changed" in previousData) ? previousData.changed : false;
+				    jQuery.data(t[0], 'data', { revertValue: revertValue, previousValue: previousValue, originalValue: originalValue, changed: changed });
 
 				    // handle tabbed scrolling
 				    // remembered scroll position of all rows in this block
@@ -80,13 +83,17 @@
 						    break;
 				    }
 			    } else if (event.type == "focusout" || (event.type == 'change' && (t.attr('type') == 'checkbox' || t.is('select')))) {
+				    if (event.type == "focusout" && t.attr('type') == 'checkbox') return;
+
 				    // stop editting
 				    p.removeClass('editting');
 
-				    var previousData    = jQuery.data(t[0], 'data');
-				    var previousValue   = (previousData) ? previousData.previousValue : null;
 				    var v = t.val();
+				    var previousData    = jQuery.data(t[0], 'data');
+				    var previousValue   = (previousData && "previousValue" in previousData) ? previousData.previousValue : null;
+				    var changed         = (previousData && "changed" in previousData) ? previousData.changed : false;
 				    var newValue        = (t.attr('type') == 'checkbox') ? t.is(':checked') : ((v) ? v.trim() : null);
+				    var originalValue   = (previousData && "originalValue" in previousData) ? previousData.originalValue : ((t.attr('type') == 'checkbox') ? !newValue : v);
 
 				    // did the value change?
 				    if (!previousData || (previousData && newValue != previousValue)) {
@@ -94,17 +101,18 @@
 					    var name        = t.attr('name');
 
 					    // remember the previous data so we can revert in case of error
-					    jQuery.data(t[0], 'data', { previousValue: previousValue, revertValue: previousValue, originalValue: previousData.originalValue });
+					    jQuery.data(t[0], 'data', { previousValue: previousValue, revertValue: previousValue, originalValue: originalValue, changed: changed });
 
 					    updateValue(t, entityType, identifier, name, newValue);
 				    }
 			    } else if (event.type == 'dblclick' && t.hasClass('error')) {
 				    // revert the value of an errored field
-				    var previousData= jQuery.data(t[0], 'data');
-				    var previousValue   = (previousData) ? previousData.previousValue : null;
-				    var revertValue = (previousData) ? previousData.revertValue : null;
-				    var identifier  = t.parent().parent().attr('identifier');
-				    var name        = t.attr('name');
+				    var previousData    = jQuery.data(t[0], 'data');
+				    var previousValue   = (previousData && "previousValue" in previousData) ? previousData.previousValue : null;
+				    var revertValue     = (previousData && "revertValue" in previousData) ? previousData.revertValue : null;
+				    var changed         = (previousData && "changed" in previousData) ? previousData.changed : false;
+				    var identifier      = t.parent().parent().attr('identifier');
+				    var name            = t.attr('name');
 
 					// revert value in input field
 				    t.val(revertValue);
@@ -116,20 +124,12 @@
 				    });
 
 				    // remember previousValue
-				    jQuery.data(t[0], 'data', { previousValue: revertValue, originalValue: previousData.originalValue });
+				    jQuery.data(t[0], 'data', { previousValue: revertValue, originalValue: previousData.originalValue, changed: changed });
 
 				    // the value in the back-end should not really need to be updated,
 				    // but we do it anyways so we can be certain the values are correct
 				    // and the proper animations are shown
-				    updateValue(t, entityType, identifier, name, revertValue, function(e) {
-					    // have we reverted to the original data? If so,
-					    // revert the green success background to white
-					    if (previousData.originalValue == revertValue) {
-						    e.parent().delay(2000).animate({ 'background-color':'#ffffff' }, 400, function () {
-							    $(this).css({'background-color':''});
-						    });
-					    }
-				    });
+				    updateValue(t, entityType, identifier, name, revertValue);
 			    } else {
 //				    console.log('unhandled event: ' + event.type);
 			    }
@@ -266,13 +266,26 @@
 			    }
 		    }
 
-		    function updateValue(element, entityType, identifier, name, newValue, onSuccess) {
+		    function increaseChanged() {
+			    changed++;
+			    $('changed > value').html(changed);
+			    if (changed == 1) {
+				    $('changed').fadeTo(400, 1).tipTip({content: 'the number of changes made to the study'});
+			    }
+		    }
+
+		    function decreaseChanged() {
+			    changed--;
+			    if (changed == 0) {
+				    $('changed').unbind('hover').fadeTo(400, 0);
+			    }
+			    $('changed > value').html(changed);
+		    }
+
+		    function updateValue(element, entityType, identifier, name, newValue) {
 //console.log('ajax update a '+entityType+' with uuid:'+identifier+', name:'+name+', value:'+newValue);
 			    var parentElement = element.parent();
 			    parentElement.addClass('updating');
-
-			    // set default onSuccess handler if undefined
-			    if (!onSuccess) onSuccess = function(element) { };
 
 			    // perform ajax call
 			    $.ajax({
@@ -308,22 +321,38 @@
 					    element.addClass('error');
 				    },
 				    success: function() {
+					    var previousData = jQuery.data(element[0], 'data');
+					    var changed = (previousData && previousData.changed) ? true : false;
+
 					    // remove previous tooltip
 					    parentElement.unbind('hover');
 
 						// animate
+//					    parentElement.removeClass('highlight');
 					    parentElement.removeClass('updating');
 					    parentElement.css({'background-color':''});
 					    parentElement.css({'background-color':'#81bc00'});
 					    parentElement.animate({'background-color':'#f9ffea'}, 400);
 					    element.removeClass('error');
 
-					    // remember new value
-					    var previousData= jQuery.data(element[0], 'data');
-					    jQuery.data(element[0], 'data', { previousValue: newValue, originalValue: previousData.originalValue });
+					    // have we reverted to the original data? If so,
+					    // revert the green success background to white
+					    if (previousData.originalValue == newValue) {
+						    if (changed) {
+							    decreaseChanged();
+							    changed = false;
+						    }
 
-					    // callback onSuccess
-					    onSuccess(element);
+						    parentElement.delay(400).animate({ 'background-color':'#ffffff' }, 1000, function () {
+							    $(this).css({'background-color':''});
+						    });
+					    } else if (!changed) {
+						    increaseChanged();
+							changed = true;
+					    }
+
+					    // remember new value
+					    jQuery.data(element[0], 'data', { previousValue: newValue, originalValue: previousData.originalValue, changed: changed });
 				    }
 			    });
 		    }
@@ -366,6 +395,12 @@
 
 <div id="studyView">
 	<h1>canRead: ${canRead}, canWrite: ${canWrite}</h1>
+
+	<g:if test="${canWrite}">
+	<changed>
+		<value>0</value>
+	</changed>
+	</g:if>
 
 	<div id="timeline" class="box"></div>
 
