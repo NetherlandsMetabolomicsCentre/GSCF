@@ -7,6 +7,7 @@ package dbnp.studycapturing
 
 import org.dbnp.gdt.TemplateEntity
 import org.dbnp.gdt.Term
+import org.dbnp.gdt.Template
 
 class StudyViewTagLib {
 	// define the tag namespace (e.g.: <foo:action ... />
@@ -19,6 +20,22 @@ class StudyViewTagLib {
 		Boolean canRead = (attrs.containsKey('canRead')) ? attrs.get('canRead').toString().toBoolean() : false
 		Boolean canWrite = (attrs.containsKey('canWrite')) ? attrs.get('canWrite').toString().toBoolean() : false
 		String entityType = entity.class.toString().split(/\./).last()
+
+//		// add template field
+//		def templates = Template.findAllByEntity(entity.class)
+//		out << render(template: "common/templateElement", model: [
+//				entity: entity,
+//				entityType: entityType,
+//				field: [
+//					name    : 'template',
+//					value   : entity.template,
+//					required: true
+//				],
+//				fieldType: 'template',
+//				canRead: canRead,
+//				canWrite: canWrite,
+//				templates   : Template.findAllByEntity(entity.class)
+//		])
 
 		// iterate through entity fields
 		entity.giveFields().each { field ->
@@ -39,12 +56,15 @@ class StudyViewTagLib {
 		Boolean canWrite = (attrs.containsKey('canWrite')) ? attrs.get('canWrite').toString().toBoolean() : false
 		String entityType = entity.class.toString().split(/\./).last()
 
+//		def templates = Template.findAllByEntity(entity.class)
+
 		out << render(template: "common/templateFields", model: [
 				entity: entity,
 				entityType: entityType,
 				fields: entity.giveFields(),
 				canRead: canRead,
 				canWrite: canWrite
+//				templates: templates
 		])
 	}
 
@@ -66,7 +86,18 @@ class StudyViewTagLib {
 
 		attrs.from = terms
 		attrs.optionKey = "id"
-		attrs.value = attrs.value.id
+		attrs.value = attrs?.value?.id
+
+		out << select(attrs)
+	}
+
+	def template = { attrs, body ->
+		def entity = attrs.get('entity')
+		def templates = Template.findAllByEntity(entity.class)
+
+		attrs.from = templates
+		attrs.optionKey = "id"
+		attrs.values = attrs.value.id
 
 		out << select(attrs)
 	}

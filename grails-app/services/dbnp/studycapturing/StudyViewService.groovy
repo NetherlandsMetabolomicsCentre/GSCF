@@ -8,6 +8,7 @@ package dbnp.studycapturing
 import dbnp.studycapturing.Study
 import dbnp.authentication.SecUser
 import org.dbnp.gdt.Term
+import org.dbnp.gdt.Template
 
 class StudyViewService {
     static transactional = true
@@ -60,6 +61,12 @@ class StudyViewService {
 		    study.cleanup = true
 		    study.description = "Study description by ${user.email}"
 		    study.startDate = new Date()
+
+		    // fetch first template to use as initial template
+			def templates = Template.findAllByEntity(study.class)
+		    if (templates) {
+			    study.template = templates[0]
+		    }
 
 			// make sure the title is unique
 		    String title = "New study by ${user.username}"

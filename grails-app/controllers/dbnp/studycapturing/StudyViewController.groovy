@@ -10,6 +10,7 @@ import dbnp.authentication.SecUser
 import grails.converters.JSON
 import org.dbnp.gdt.TemplateFieldType
 import org.dbnp.gdt.Term
+import org.dbnp.gdt.Template
 
 class StudyViewController {
 	def authenticationService
@@ -90,7 +91,12 @@ class StudyViewController {
 			study.cleanup = false
 
 			// update field
-			study.setFieldValue(name, value)
+			if (name == "template") {
+				def template = Template.findByName(value)
+				study.template = template
+			} else {
+				study.setFieldValue(name, value)
+			}
 
 			// validate instance
 			if (study.validate()) {
@@ -153,15 +159,21 @@ class StudyViewController {
 		if (subject) {
 			Study study = subject.parent
 			if (study.canWrite(user)) {
-				// do we need to do something special?
-				switch (subject.giveFieldType(name)) {
-					case TemplateFieldType.ONTOLOGYTERM:
-						value = Term.findById(value)
-						break
-				}
+				// update field
+				if (name == "template") {
+					def template = Template.findByName(value)
+					subject.template = template
+				} else {
+					// do we need to do something special?
+					switch (subject.giveFieldType(name)) {
+						case TemplateFieldType.ONTOLOGYTERM:
+							value = Term.findById(value)
+							break
+					}
 
-				// update the subject
-				subject.setFieldValue(name, value)
+					// update the subject
+					subject.setFieldValue(name, value)
+				}
 
 				// validate subject
 				if (subject.validate()) {
