@@ -14,11 +14,20 @@
 
 		    // (current and future) event handlers
 		    $(document).on('hover blur focus change dblclick', '.editable', function(event) {
-			    var t = $(this);        // input element
-			    var p = t.parent();     // value element
-			    var r   = p.parent();   // row element
-			    var pp  = r.parent();   // block element enclosing the rows
+			    var t   = $(this);          // input element
+			    var p   = t.parent();       // value element
+			    var r   = p.parent();       // row element
+			    var pp  = r.parent();       // block element enclosing the rows
 			    var entityType  = t.parent().parent().attr('type');
+
+			    var v = t.val();
+			    var previousData    = jQuery.data(t[0], 'data');
+//			    var previousValue   = (v) ? v.trim() : null
+			    var revertValue     = (previousData && "revertValue" in previousData) ? previousData.revertValue : null;
+			    var changed         = (previousData && "changed" in previousData) ? previousData.changed : false;
+
+			    var identifier      = t.parent().parent().attr('identifier');
+			    var name            = t.attr('name');
 
 			    if (event.type == "mouseenter" || event.type == "mouseleave") {
 				    p.toggleClass('highlight');
@@ -27,12 +36,8 @@
 				    p.addClass('editting');
 
 				    // remember cell data
-				    var v = t.val();
-				    var previousData    = jQuery.data(t[0], 'data');
 				    var previousValue   = (v) ? v.trim() : null
-				    var revertValue     = (previousData && "revertValue" in previousData) ? previousData.revertValue : null;
 				    var originalValue   = (previousData && "originalValue" in previousData) ? previousData.originalValue : ((t.attr('type') == 'checkbox') ? !newValue : v);
-				    var changed         = (previousData && "changed" in previousData) ? previousData.changed : false;
 				    jQuery.data(t[0], 'data', { revertValue: revertValue, previousValue: previousValue, originalValue: originalValue, changed: changed });
 
 				    // handle tabbed scrolling
@@ -88,18 +93,12 @@
 				    // stop editting
 				    p.removeClass('editting');
 
-				    var v = t.val();
-				    var previousData    = jQuery.data(t[0], 'data');
 				    var previousValue   = (previousData && "previousValue" in previousData) ? previousData.previousValue : null;
-				    var changed         = (previousData && "changed" in previousData) ? previousData.changed : false;
 				    var newValue        = (t.attr('type') == 'checkbox') ? t.is(':checked') : ((v) ? v.trim() : null);
 				    var originalValue   = (previousData && "originalValue" in previousData) ? previousData.originalValue : ((t.attr('type') == 'checkbox') ? !newValue : v);
 
 				    // did the value change?
 				    if (!previousData || (previousData && newValue != previousValue)) {
-					    var identifier  = t.parent().parent().attr('identifier');
-					    var name        = t.attr('name');
-
 					    // remember the previous data so we can revert in case of error
 					    jQuery.data(t[0], 'data', { previousValue: previousValue, revertValue: previousValue, originalValue: originalValue, changed: changed });
 
@@ -107,12 +106,7 @@
 				    }
 			    } else if (event.type == 'dblclick' && t.hasClass('error')) {
 				    // revert the value of a field that could not be saved
-				    var previousData    = jQuery.data(t[0], 'data');
 				    var previousValue   = (previousData && "previousValue" in previousData) ? previousData.previousValue : null;
-				    var revertValue     = (previousData && "revertValue" in previousData) ? previousData.revertValue : null;
-				    var changed         = (previousData && "changed" in previousData) ? previousData.changed : false;
-				    var identifier      = t.parent().parent().attr('identifier');
-				    var name            = t.attr('name');
 
 					// revert value in input field
 				    t.val(revertValue);
@@ -129,8 +123,9 @@
 					    $(this).hide().css({opacity: 1});
 				    });
 
-				    // remember previousValue
-				    jQuery.data(t[0], 'data', { previousValue: revertValue, originalValue: previousData.originalValue, changed: changed });
+				    // remember cell data
+				    previousData.previousValue = previousValue
+				    jQuery.data(t[0], 'data', previousData);
 
 				    // the value in the back-end should not really need to be updated,
 				    // but we do it anyways so we can be certain the values are correct
