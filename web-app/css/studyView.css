@@ -19,20 +19,12 @@
 	background: url(../images/spinner.gif) no-repeat right top;
 }
 
+/** REMOVE THIS??? **/
 #studyView .updateOkay {
 	background: #bbe094;
+	border: 10px solid red;
 }
-
-#tiptip_holder #tiptip_content error {
-	color: #f0c2b3;
-	display: block;
-}
-
-#tiptip_holder #tiptip_content comment {
-	font-style: italic;
-	display: block;
-	padding-top: 10px;
-}
+/** REMOVE THIS??? END **/
 
 /** begin :: generics **/
 #studyView element {
@@ -167,6 +159,42 @@
 	color: #006dba;
 }
 /** begin :: vertical view **/
+
+/** begin :: tipTip extensions **/
+#tiptip_holder #tiptip_content error {
+	color: #f0c2b3;
+	display: block;
+}
+
+#tiptip_holder #tiptip_content error:before {
+	content:url(../plugins/famfamfam-1.0.1/images/icons/exclamation.png);
+	padding-right: 10px;
+}
+
+#tiptip_holder #tiptip_content comment {
+	font-style: italic;
+	display: block;
+	padding-top: 10px;
+}
+
+#tiptip_holder #tiptip_content comment:before {
+	content:url(../plugins/famfamfam-1.0.1/images/icons/information.png);
+	padding-right: 10px;
+}
+
+#tiptip_holder #tiptip_content undo {
+	font-style: italic;
+	color: #97daea;
+	display: block;
+	padding-top: 10px;
+	vertical-align: top;
+}
+
+#tiptip_holder #tiptip_content undo:before {
+	content:url(../plugins/famfamfam-1.0.1/images/icons/arrow_undo.png);
+	padding-right: 10px;
+}
+/** end :: tipTip extensions **/
 
 /** start :: debug **/
 #studyView element debug {

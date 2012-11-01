@@ -11,7 +11,7 @@
 	    $('document').ready(function () {
 		    <g:if test="${canWrite}">
 		    // (current and future) event handlers
-		    $(document).on('hover blur focus change', '.editable', function(event) {
+		    $(document).on('hover blur focus change dblclick', '.editable', function(event) {
 			    var t = $(this);        // input element
 			    var p = t.parent();     // value element
 			    var r   = p.parent();   // row element
@@ -24,9 +24,12 @@
 					// start editting class
 				    p.addClass('editting');
 
+				    var previousData= jQuery.data(t[0], 'data');
+				    var revertValue = (previousData) ? previousData.revertValue : null;
+
 				    // remember current value
 				    var v = t.val();
-				    jQuery.data(t[0], 'data', { previousValue: (v) ? v.trim() : null });
+				    jQuery.data(t[0], 'data', { revertValue: revertValue, previousValue: (v) ? v.trim() : null });
 
 				    // handle tabbed scrolling
 				    // remembered scroll position of all rows in this block
@@ -88,9 +91,43 @@
 				    if (!previousData || (previousData && newValue != previousValue)) {
 					    var identifier  = t.parent().parent().attr('identifier');
 					    var name        = t.attr('name');
-//console.log(t.attr('name') + ' :: ' + previousValue + ' > ' + newValue);
+
+					    // remember the previous data so we can revert in case of error
+					    jQuery.data(t[0], 'data', { previousValue: previousValue, revertValue: previousValue });
+
 					    updateValue(t, entityType, identifier, name, newValue);
 				    }
+			    } else if (event.type == 'dblclick' && t.hasClass('error')) {
+				    // revert the value of an errored field
+				    var previousData= jQuery.data(t[0], 'data');
+				    var previousValue   = (previousData) ? previousData.previousValue : null;
+				    var revertValue = (previousData) ? previousData.revertValue : null;
+				    var identifier  = t.parent().parent().attr('identifier');
+				    var name        = t.attr('name');
+
+					// revert value in input field
+				    t.val(revertValue);
+
+				    // remove tooltip
+				    t.unbind('hover');
+				    $('div#tiptip_holder').fadeTo(100,0, function() {
+					    $(this).remove();
+				    });
+
+				    // remember previousValue
+				    jQuery.data(t[0], 'data', { previousValue: revertValue });
+
+				    // the value in the back-end should not really need to be updated,
+				    // but we do it anyways so we can be certain the values are correct
+				    // and the proper animations are shown
+				    updateValue(t, entityType, identifier, name, revertValue, function(e) {
+					    e.parent().delay(2000).animate({ 'background-color': '#ffffff' }, 400, function() {
+						    // remove background style
+						    $(this).css({'background-color' : ''});
+					    });
+				    });
+			    } else {
+				    console.log('unhandled event: ' + event.type);
 			    }
 		    });
 
@@ -225,10 +262,13 @@
 			    }
 		    }
 
-		    function updateValue(element, entityType, identifier, name, newValue) {
+		    function updateValue(element, entityType, identifier, name, newValue, onSuccess) {
 //console.log('ajax update a '+entityType+' with uuid:'+identifier+', name:'+name+', value:'+newValue);
 			    var parentElement = element.parent();
 			    parentElement.addClass('updating');
+
+			    // set default onSuccess handler if undefined
+			    if (!onSuccess) onSuccess = function(element) { };
 
 			    // perform ajax call
 			    $.ajax({
@@ -248,17 +288,20 @@
 
 						// animate
 					    parentElement.removeClass('updating');
-					    parentElement.css({ 'background-color': '#e8503e' });
-					    parentElement.animate({ 'background-color': '#fee8e5' }, 400);
+					    parentElement.css({'background-color':''});
+					    parentElement.css({'background-color':'#e8503e'});
+					    parentElement.animate({'background-color':'#fee8e5'}, 400);
 
 					    // define error message
 					    var error = '<error>' + obj.error + '</error>';
 					    if (obj.comment) {
 						    error = error + '<comment>' + obj.comment + '</comment>'
 					    }
+					    error = error + '<undo>double click to undo</undo>'
 
 						// add error message tooltip
 					    parentElement.tipTip({content: error});
+					    element.addClass('error');
 				    },
 				    success: function() {
 					    // remove previous tooltip
@@ -266,11 +309,16 @@
 
 						// animate
 					    parentElement.removeClass('updating');
-					    parentElement.css({ 'background-color': '#bbe094' });
-					    parentElement.animate({ 'background-color': '#f2ffe4' }, 400);
+					    parentElement.css({'background-color':''});
+					    parentElement.css({'background-color':'#81bc00'});
+					    parentElement.animate({'background-color':'#f9ffea'}, 400);
+					    element.removeClass('error');
 
 					    // remember new value
 					    jQuery.data(element[0], 'data', { previousValue: newValue });
+
+					    // callback onSuccess
+					    onSuccess(element);
 				    }
 			    });
 		    }
