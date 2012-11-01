@@ -9,6 +9,8 @@
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 	border: 2px solid #006dba;
+
+	padding: 5px;
 }
 
 #studyView .waitForLoad {

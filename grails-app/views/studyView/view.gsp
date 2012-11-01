@@ -106,7 +106,7 @@
 					    updateValue(t, entityType, identifier, name, newValue);
 				    }
 			    } else if (event.type == 'dblclick' && t.hasClass('error')) {
-				    // revert the value of an errored field
+				    // revert the value of a field that could not be saved
 				    var previousData    = jQuery.data(t[0], 'data');
 				    var previousValue   = (previousData && "previousValue" in previousData) ? previousData.previousValue : null;
 				    var revertValue     = (previousData && "revertValue" in previousData) ? previousData.revertValue : null;
@@ -117,10 +117,16 @@
 					// revert value in input field
 				    t.val(revertValue);
 
-				    // remove tooltip
+				    // remove tooltip the proper way by
+				    // 1. unbinding the hover event
+				    // 2. fading the tooltip out by changing the opacity to 0
+				    // 3. hiding it completely (display: none);
+				    // 4. set the opacity to 1
+				    // we have to do it like this to make sure no tooltips remain in
+				    // view and the others remain working
 				    t.unbind('hover');
-				    $('div#tiptip_holder').fadeTo(100,0, function() {
-					    $(this).remove();
+				    $('div#tiptip_holder').fadeTo(400,0, function() {
+					    $(this).hide().css({opacity: 1});
 				    });
 
 				    // remember previousValue
@@ -394,19 +400,17 @@
 <body>
 
 <div id="studyView">
-	<h1>canRead: ${canRead}, canWrite: ${canWrite}</h1>
-
 	<g:if test="${canWrite}">
 	<changed>
 		<value>0</value>
 	</changed>
 	</g:if>
 
-	<div id="timeline" class="box"></div>
-
 	<div id="details" class="box"></div>
 
 	<div id="subjects" class="box"></div>
+
+	<div id="timeline" class="box"></div>
 </div>
 
 </body>
