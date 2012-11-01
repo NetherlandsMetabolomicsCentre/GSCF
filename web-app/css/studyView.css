@@ -87,7 +87,10 @@
 	font-weight: bold;
 	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.68);
 
-	vertical-align: top;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+
+	vertical-align: middle;
 	text-align: center;
 
 	-moz-border-radius: 2px;
@@ -113,8 +116,10 @@
 
 #studyView element input, #studyView element textarea {
 	border: none;
-	font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-	font-size: 10pt;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	/*font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', Arial, Helvetica, sans-serif;*/
+	/*font-size: 10pt;*/
 	font-weight: 100;
 	letter-spacing: 1px;
 	background-color: transparent;
@@ -126,7 +131,9 @@
 }
 
 #studyView element select {
-	font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	/*font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', Arial, Helvetica, sans-serif;*/
 	border: none;
 	background-color: transparent;
 }
