@@ -24,12 +24,13 @@
 					// start editting class
 				    p.addClass('editting');
 
-				    var previousData= jQuery.data(t[0], 'data');
-				    var revertValue = (previousData) ? previousData.revertValue : null;
-
-				    // remember current value
+				    // remember cell data
 				    var v = t.val();
-				    jQuery.data(t[0], 'data', { revertValue: revertValue, previousValue: (v) ? v.trim() : null });
+				    var previousData    = jQuery.data(t[0], 'data');
+				    var previousValue   = (v) ? v.trim() : null
+				    var revertValue     = (previousData) ? previousData.revertValue : null;
+				    var originalValue   = (previousData && previousData.originalValue) ? previousData.originalValue : v;
+				    jQuery.data(t[0], 'data', { revertValue: revertValue, previousValue: previousValue, originalValue: originalValue });
 
 				    // handle tabbed scrolling
 				    // remembered scroll position of all rows in this block
@@ -93,7 +94,7 @@
 					    var name        = t.attr('name');
 
 					    // remember the previous data so we can revert in case of error
-					    jQuery.data(t[0], 'data', { previousValue: previousValue, revertValue: previousValue });
+					    jQuery.data(t[0], 'data', { previousValue: previousValue, revertValue: previousValue, originalValue: previousData.originalValue });
 
 					    updateValue(t, entityType, identifier, name, newValue);
 				    }
@@ -115,19 +116,22 @@
 				    });
 
 				    // remember previousValue
-				    jQuery.data(t[0], 'data', { previousValue: revertValue });
+				    jQuery.data(t[0], 'data', { previousValue: revertValue, originalValue: previousData.originalValue });
 
 				    // the value in the back-end should not really need to be updated,
 				    // but we do it anyways so we can be certain the values are correct
 				    // and the proper animations are shown
 				    updateValue(t, entityType, identifier, name, revertValue, function(e) {
-					    e.parent().delay(2000).animate({ 'background-color': '#ffffff' }, 400, function() {
-						    // remove background style
-						    $(this).css({'background-color' : ''});
-					    });
+					    // have we reverted to the original data? If so,
+					    // revert the green success background to white
+					    if (previousData.originalValue == revertValue) {
+						    e.parent().delay(2000).animate({ 'background-color':'#ffffff' }, 400, function () {
+							    $(this).css({'background-color':''});
+						    });
+					    }
 				    });
 			    } else {
-				    console.log('unhandled event: ' + event.type);
+//				    console.log('unhandled event: ' + event.type);
 			    }
 		    });
 
@@ -315,7 +319,8 @@
 					    element.removeClass('error');
 
 					    // remember new value
-					    jQuery.data(element[0], 'data', { previousValue: newValue });
+					    var previousData= jQuery.data(element[0], 'data');
+					    jQuery.data(element[0], 'data', { previousValue: newValue, originalValue: previousData.originalValue });
 
 					    // callback onSuccess
 					    onSuccess(element);
