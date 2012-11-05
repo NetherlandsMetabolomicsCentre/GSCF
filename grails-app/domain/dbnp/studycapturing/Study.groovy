@@ -1,6 +1,7 @@
 package dbnp.studycapturing
 import org.dbnp.gdt.*
 import dbnp.authentication.SecUser
+import dbnp.generic.Audit
 
 /**
  * Domain class describing the basic entity in the study capture part: the Study class.
@@ -48,7 +49,8 @@ class Study extends TemplateEntity {
 		persons: StudyPerson,
 		publications: Publication,
 		readers: SecUser,
-		writers: SecUser
+		writers: SecUser,
+		audits: Audit
 	]
 
 	static constraints = {
@@ -76,6 +78,8 @@ class Study extends TemplateEntity {
 		// Workaround for bug http://jira.codehaus.org/browse/GRAILS-6754
 		templateTextFields type: 'text'
 
+		// sort order of audit log descending by date
+		audits sort: 'dateCreated', order: 'desc'
 	}
 
 	/**

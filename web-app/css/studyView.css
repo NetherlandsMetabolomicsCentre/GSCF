@@ -21,6 +21,54 @@
 	background: url(../images/spinner.gif) no-repeat right top;
 }
 
+/** begin :: auditting **/
+#studyView auditLog {
+	display: none;
+}
+
+auditTrail {
+	display: block;
+	width: 600px;
+}
+
+auditTrail entry {
+	display: block;
+}
+auditTrail entry who {
+	display: inline-block;
+	width: 70px;
+	overflow: hidden;
+}
+auditTrail entry .you {
+	font-style: italic;
+	font-weight: bold;
+	color: #799c4b;
+	vertical-align: top;
+}
+auditTrail name {
+	display: inline-block;
+	width: 100px;
+}
+auditTrail value {
+	display: inline-block;
+	width: 300px;
+}
+auditTrail entry date {
+	display: inline-block;
+	width: 40px;
+}
+auditTrail entry .today {
+	font-style: italic;
+	font-weight: bold;
+	color: #799c4b;
+}
+auditTrail entry time {
+	display: inline-block;
+	width: 70px;
+}
+
+/** end :: auditting **/
+
 /** begin :: changed **/
 #studyView changed {
 	display: block;

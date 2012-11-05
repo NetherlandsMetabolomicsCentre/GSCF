@@ -49,7 +49,7 @@ class StudyViewController {
 
 	def ajaxTimeline = {
 		SecUser user = authenticationService.getLoggedInUser()
-		studyViewService.wrap(params, { study, summary ->
+		studyViewService.wrap(response, params, { study, summary ->
 			render(view: "elements/timeline", model: [study: study, summary: summary, canRead: study.canRead(user), canWrite: study.canWrite(user)])
 		})
 	}
@@ -57,7 +57,7 @@ class StudyViewController {
 	def ajaxDetails = {
 		SecUser user = authenticationService.getLoggedInUser()
 		Integer cleanupInDays = RemoveExpiredStudiesJob.studyExpiry
-		studyViewService.wrap(params, { study, summary ->
+		studyViewService.wrap(response, params, { study, summary ->
 			render(view: "elements/details", model: [
 					study: study,
 					summary: summary,
@@ -70,7 +70,7 @@ class StudyViewController {
 
 	def ajaxSubjects = {
 		SecUser user = authenticationService.getLoggedInUser()
-		studyViewService.wrap(params, { study, summary ->
+		studyViewService.wrap(response, params, { study, summary ->
 			render(view: "elements/subjects", model: [
 					subjects: study.subjects,
 					canRead: study.canRead(user),
@@ -80,7 +80,7 @@ class StudyViewController {
 	}
 
 	def ajaxUpdateStudy = {
-		println "update study: ${params}"
+//		println "update study: ${params}"
 
 		SecUser user = authenticationService.getLoggedInUser()
 		String name = (params.containsKey('name')) ? params.get('name') : ''
@@ -106,6 +106,9 @@ class StudyViewController {
 			if (study.validate()) {
 				if (study.save()) {
 					response.status = 200
+
+					// add to audit trail
+					studyViewService.addToAuditTrail(study, name, value)
 				} else {
 					response.status = 409
 
@@ -151,7 +154,7 @@ class StudyViewController {
 	}
 
 	def ajaxUpdateSubject = {
-		println params
+//		println params
 
 		SecUser user = authenticationService.getLoggedInUser()
 		String name = (params.containsKey('name')) ? params.get('name') : ''
@@ -183,6 +186,9 @@ class StudyViewController {
 				if (subject.validate()) {
 					if (subject.save()) {
 						response.status = 200
+
+						// add to audit trail
+						studyViewService.addToAuditTrail(subject, name, value)
 					} else {
 						response.status = 409
 
@@ -227,6 +233,23 @@ class StudyViewController {
 			render "${params.callback}(${result as JSON})"
 		} else {
 			render result as JSON
+		}
+	}
+
+	def ajaxAuditTrail = {
+		SecUser user= authenticationService.getLoggedInUser()
+		String uuid = (params.containsKey('identifier')) ? params.get('identifier') : ''
+		Study study = Study.findWhere(UUID: uuid)
+		Date today = new Date()
+
+		response.contentType = "text/plain"
+		response.characterEncoding = "UTF-8"
+
+		// check if user is allowed to access the audit log
+		if (study && study.canWrite(user)) {
+			render(view: "common/auditTrail", model: [study: study, user: user, today: today])
+		} else {
+			render(view: "errors/invalid")
 		}
 	}
 }

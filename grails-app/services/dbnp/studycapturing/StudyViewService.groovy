@@ -9,6 +9,7 @@ import dbnp.studycapturing.Study
 import dbnp.authentication.SecUser
 import org.dbnp.gdt.Term
 import org.dbnp.gdt.Template
+import dbnp.generic.Audit
 
 class StudyViewService {
     static transactional = true
@@ -94,8 +95,11 @@ class StudyViewService {
 		return fetchStudyForCurrentUserWithId(id)
 	}
 
-	def wrap(params,Closure block) {
+	def wrap(response, params,Closure block) {
 		Long id = (params.containsKey('id') && (params.get('id').toLong()) > 0) ? params.get('id').toLong() : 0
+
+		response.contentType = "text/plain"
+		response.characterEncoding = "UTF-8"
 
 		try {
 			Study study = fetchStudyForCurrentUserWithId(id)
@@ -118,5 +122,29 @@ class StudyViewService {
 		}
 
 		return terms.sort{ it.name }
+	}
+
+	def addToAuditTrail(entity, String name, value) {
+		SecUser user = authenticationService.getLoggedInUser()
+		Study study
+
+		// instantiate Audit
+		Audit audit = new Audit(user: user, fieldName: name, fieldValue: value)
+
+		// set entity information
+		if (entity instanceof Study) {
+			study = entity
+		} else {
+			def matches = entity.getClass().toString() =~ /\.([a-zA-Z]+)$/
+			String entityName = matches[0][1]
+
+			audit.entityType = entityName
+			audit.entityUUID = entity.giveUUID()
+
+			study = entity.parent
+		}
+
+		// add audit entry to study
+		study.addToAudits(audit)
 	}
 }

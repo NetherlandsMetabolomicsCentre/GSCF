@@ -4,4 +4,3 @@
 		<sv:horizontal entity="${subject}" canRead="${canRead}" canWrite="${canWrite}"/>
 	</g:each>
 </g:if>
-&nbsp;

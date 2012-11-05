@@ -392,6 +392,49 @@
 				});
 		    });
 	    });
+
+		<g:if test="${canWrite}">
+        // handle auditTrail
+	    $(document).on('click', '#studyView auditLink', function() {
+			// get audit trail element or add
+			// it if it does not yet exist
+		    var auditTrail = $('auditTrail');
+		    if (!auditTrail.length) {
+			    var e = document.createElement('auditLog');
+			    $('div#studyView')[0].appendChild(e);
+			    auditTrail = $(e);
+		    }
+
+		    // update element to contain latest audit log
+		    // perform ajax call
+		    $.ajax({
+			    url:"<g:resource/>/studyView/ajaxAuditTrail" ,
+			    dataType: "html",
+			    context: document.body,
+			    data: {
+				    entity: 'Study',
+				    identifier: '${study.giveUUID()}'
+			    },
+			    success: function(msg) {
+				    auditTrail.html(msg);
+
+				    // show modal dialogue
+				    auditTrail.dialog({
+					    modal: true,
+					    title: 'Audit trail',
+					    width: 600,
+					    maxHeight: 400,
+					    buttons: {
+						    Ok: function() {
+							    $(this).dialog('close');
+							    $(this).remove();
+						    }
+					    }
+				    });
+			    }
+		    });
+	    });
+	    </g:if>
     </script>
 </head>
 <body>
