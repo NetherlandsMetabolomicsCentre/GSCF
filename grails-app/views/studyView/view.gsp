@@ -45,9 +45,11 @@
 				    var cl  = jQuery.data(pp[0], 'data') ? jQuery.data(pp[0], 'data').left : 0;
 				    var sl  = (cl == -100) ? 0 : r.scrollLeft();    // scroll position of this row
 
-				    // sometimes the left focus becomes 1 pixels, if so we want it to be zero to
-				    // show the left pixel of the row as well
-				    var toZero = (sl < 10);
+				    // sometimes the left focus becomes leftPosition:1 pixels,
+				    // instead of 0. If this happens we would like to show the
+				    // show the left pixel of the row as well, so force the
+				    // position to be 0
+				    var toZero = (sl < 10 && sl > 0);
 				    if (toZero) sl = 0;
 
 				    // do we need to handle scrolling?
