@@ -63,9 +63,9 @@ class HomeController {
 			dailyStatistics = [:]
 			long oneDay		= (1 * 24 * 60 * 60 * 1000)
 			startDate 		= (usersPerDay[0].day <= studiesPerDay[0].day) ? usersPerDay[0].day : studiesPerDay[0].day
-			startDate		= (templatesPerDay[0].day != null && templatesPerDay[0].day < startDate) ? templatesPerDay[0].day : startDate
-			endDate 		= (usersPerDay[usersPerDay.size()-1].day >= studiesPerDay[studiesPerDay.size()-1].day) ? usersPerDay[usersPerDay.size()-1].day : studiesPerDay[studiesPerDay.size()-1].day
-			endDate			= (templatesPerDay[0].day != null && templatesPerDay[templatesPerDay.size()-1].day > endDate) ? templatesPerDay[templatesPerDay.size()-1].day : endDate
+			startDate		= (templatesPerDay[0]?.day != null && templatesPerDay[0]?.day < startDate) ? templatesPerDay[0]?.day : startDate
+			endDate 		= (usersPerDay[usersPerDay.size()-1].day >= studiesPerDay[studiesPerDay.size()-1].day) ? usersPerDay[usersPerDay.size()-1]?.day : studiesPerDay[studiesPerDay.size()-1]?.day
+			endDate			= (templatesPerDay[0]?.day != null && templatesPerDay[templatesPerDay.size()-1]?.day > endDate) ? templatesPerDay[templatesPerDay.size()-1]?.day : endDate
 			date			= startDate.clone()
 
 			userTotal		= 0
