@@ -71,7 +71,11 @@ class StudyViewController {
 	def ajaxSubjects = {
 		SecUser user = authenticationService.getLoggedInUser()
 		studyViewService.wrap(params, { study, summary ->
-			render(view: "elements/subjects", model: [subjects: study.subjects, canRead: study.canRead(user), canWrite: study.canWrite(user)])
+			render(view: "elements/subjects", model: [
+					subjects: study.subjects,
+					canRead: study.canRead(user),
+					canWrite: study.canWrite(user)
+			])
 		})
 	}
 
