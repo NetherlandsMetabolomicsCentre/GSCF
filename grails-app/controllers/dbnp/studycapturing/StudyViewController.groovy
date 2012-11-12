@@ -11,6 +11,7 @@ import grails.converters.JSON
 import org.dbnp.gdt.TemplateFieldType
 import org.dbnp.gdt.Term
 import org.dbnp.gdt.Template
+import dbnp.generic.Audit
 
 class StudyViewController {
 	def authenticationService
@@ -104,16 +105,17 @@ class StudyViewController {
 
 			// validate instance
 			if (study.validate()) {
+				String fieldType = study.giveFieldType(name).toString().toLowerCase()
+
 				if (study.save()) {
 					response.status = 200
 
 					// add to audit trail
-					studyViewService.addToAuditTrail(study, name, value)
+					studyViewService.addToAuditTrail(study, fieldType, name, value)
 				} else {
 					response.status = 409
 
 					def error = study.errors.getFieldError(name)
-					String fieldType    = study.giveFieldType(name).toString().toLowerCase()
 					String errorMessage = (error) ? g.message(error: error) : g.message(code: "templateEntity.typeMismatch.${fieldType}", args: [name, value])
 					String rejectedValue= (error) ? error?.rejectedValue : value
 					String comment      = study.getField(name)?.comment
@@ -184,16 +186,17 @@ class StudyViewController {
 
 				// validate subject
 				if (subject.validate()) {
+					String fieldType    = subject.giveFieldType(name).toString().toLowerCase()
+
 					if (subject.save()) {
 						response.status = 200
 
 						// add to audit trail
-						studyViewService.addToAuditTrail(subject, name, value)
+						studyViewService.addToAuditTrail(subject, fieldType, name, value)
 					} else {
 						response.status = 409
 
 						def error = subject.errors.getFieldError(name)
-						String fieldType    = subject.giveFieldType(name).toString().toLowerCase()
 						String errorMessage = (error) ? g.message(error: error) : g.message(code: "templateEntity.typeMismatch.${fieldType}", args: [name, value])
 						String rejectedValue= (error) ? error?.rejectedValue : value
 						String comment      = subject.getField(name)?.comment
@@ -247,7 +250,11 @@ class StudyViewController {
 
 		// check if user is allowed to access the audit log
 		if (study && study.canWrite(user)) {
-			render(view: "common/auditTrail", model: [study: study, user: user, today: today])
+			render(view: "common/auditTrail", model: [
+					study: study,
+					user: user,
+					today: today
+			])
 		} else {
 			render(view: "errors/invalid")
 		}

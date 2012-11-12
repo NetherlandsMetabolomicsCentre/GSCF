@@ -147,6 +147,11 @@
 				    showTime: false,
 				    constrainInput:false,
 				    dateFormat: 'dd/mm/yy',
+				    showWeek: true,
+				    firstDay: 1,
+				    numberOfMonths: 3,
+				    showButtonPanel: true,
+				    changeYear: true,
 				    onSelect: function() {
 					    // focus the next element
 					    focusNextElement(element);
@@ -429,6 +434,22 @@
 							    $(this).dialog('close');
 							    $(this).remove();
 						    }
+					    },
+					    open: function() {
+						    $('icon', this).each(function() {
+							    var e = $(this);
+							    var uuid = e.attr('uuid');
+							    var content = e.attr('class');
+
+							    if (uuid) {
+								    content += "<br/>uuid: " + uuid
+							    }
+
+							    e.tipTip({
+								    content: content,
+								    maxWidth: "auto"
+							    });
+						    });
 					    }
 				    });
 			    }

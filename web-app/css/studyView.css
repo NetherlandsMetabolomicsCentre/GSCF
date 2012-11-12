@@ -236,11 +236,12 @@ auditTrail {
 auditTrail entry {
 	display: block;
 	vertical-align: top;
+	border-bottom: 1px solid #97daea;
 }
 
 auditTrail entry who {
 	display: inline-block;
-	width: 70px;
+	width: 38px;
 	overflow: hidden;
 }
 auditTrail entry .you {
@@ -249,12 +250,46 @@ auditTrail entry .you {
 	color: #799c4b;
 }
 
-auditTrail name {
+auditTrail icon {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+}
+
+auditTrail .date {
+	background: url(../plugins/famfamfam-1.0.1/images/icons/date.png) no-repeat center bottom;
+}
+
+auditTrail .text {
+	background: url(../plugins/famfamfam-1.0.1/images/icons/text_align_left.png) no-repeat center bottom;
+}
+
+auditTrail .string {
+	background: url(../plugins/famfamfam-1.0.1/images/icons/textfield.png) no-repeat center bottom;
+}
+
+auditTrail .gender {
+	background: url(../plugins/famfamfam-1.0.1/images/icons/group.png) no-repeat center bottom;
+}
+
+auditTrail .long {
+	background: url(../plugins/famfamfam-1.0.1/images/icons/text_padding_left.png) no-repeat center bottom;
+}
+
+auditTrail .subject {
+	background: url(../plugins/famfamfam-1.0.1/images/icons/user.png) no-repeat center bottom;
+}
+
+auditTrail .study {
+	background: url(../plugins/famfamfam-1.0.1/images/icons/layout.png) no-repeat center bottom;
+}
+
+auditTrail entry name {
 	display: inline-block;
 	width: 100px;
 }
 
-auditTrail value {
+auditTrail entry value {
 	display: inline-block;
 	width: 300px;
 }

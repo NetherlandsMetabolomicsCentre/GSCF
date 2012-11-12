@@ -124,12 +124,12 @@ class StudyViewService {
 		return terms.sort{ it.name }
 	}
 
-	def addToAuditTrail(entity, String name, value) {
+	def addToAuditTrail(entity, String fieldType, String fieldName, fieldValue) {
 		SecUser user = authenticationService.getLoggedInUser()
 		Study study
 
 		// instantiate Audit
-		Audit audit = new Audit(user: user, fieldName: name, fieldValue: value)
+		Audit audit = new Audit(user: user, fieldName: fieldName, fieldValue: fieldValue, fieldType: fieldType.toLowerCase())
 
 		// set entity information
 		if (entity instanceof Study) {

@@ -12,6 +12,7 @@ class Audit {
 	SecUser user
 	String entityType
 	String entityUUID
+	String fieldType
 	String fieldName
 	String fieldValue
 	Date dateCreated
@@ -24,6 +25,7 @@ class Audit {
 		user(nullable: false, blank: false)
 		entityType(nullable: true, blank: true)
 		entityUUID(nullable: true, blank: true)
+		fieldType(nullable: false, blank: false)
 		fieldName(nullable: false, blank: false)
 		fieldValue(nullable: true, blank: true)
 	}
