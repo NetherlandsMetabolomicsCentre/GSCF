@@ -29,11 +29,9 @@ class SubjectGroup extends Identity {
 	List<Event> giveEvents() {
 		List<Event> events = new ArrayList<Event>()
 		parent.subjectEventGroups.each {
-			if (this.id in it.subjectGroups.id) {
-				it.eventGroups.each {
-					it.events.each { event ->
-						if (event) events << event
-					}
+			if (this.id == it.subjectGroup.id) {
+				it.eventGroup.events.each { event ->
+					if (event) events << event
 				}
 			}
 		}
@@ -46,11 +44,9 @@ class SubjectGroup extends Identity {
 	List<SamplingEvent> giveSamplingEvents() {
 		List<SamplingEvent> events = new ArrayList<SamplingEvent>()
 		parent.subjectEventGroups.each {
-			if (this.id in it.subjectGroups.id) {
-				it.eventGroups.each {
-					it.samplingEvents.each { event ->
-						if (event) events << event
-					}
+			if (this.id == it.subjectGroup.id) {
+				it.eventGroup.samplingEvents.each { event ->
+					if (event) events << event
 				}
 			}
 		}

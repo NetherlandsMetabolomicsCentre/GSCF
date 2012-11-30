@@ -238,29 +238,18 @@ class ExampleStudies {
 		// Add event groups to study
 		mouseStudy.addToEventGroups(LF).addToEventGroups(HF).addToEventGroups(BV).addToEventGroups(BL).addToEventGroups(S1).addToEventGroups(S4).save(failOnError:true)
 
+        // Create subject groups
 		def LFBV1 = new SubjectGroup(name: "10% fat + vehicle for 1 week")
-		def LFBV1es = new SubjectEventGroup(startTime: 0, subjectGroups: [LFBV1], eventGroups: [LF, BV, S1])
-
 		def LFBL1 = new SubjectGroup(name: "10% fat + leptin for 1 week")
-		def LFBL1es = new SubjectEventGroup(startTime: 0, subjectGroups: [LFBL1], eventGroups: [LF, BL, S1])
-
 		def HFBV1 = new SubjectGroup(name: "45% fat + vehicle for 1 week")
-		def HFBV1es = new SubjectEventGroup(startTime: 0, subjectGroups: [HFBV1], eventGroups: [HF, BV, S1])
-
 		def HFBL1 = new SubjectGroup(name: "45% fat + leptin for 1 week")
-		def HFBL1es = new SubjectEventGroup(startTime: 0, subjectGroups: [HFBL1], eventGroups: [HF, BL, S1])
-
 		def LFBV4 = new SubjectGroup(name: "10% fat + vehicle for 4 weeks")
-		def LFBV4es = new SubjectEventGroup(startTime: 0, subjectGroups: [LFBV4], eventGroups: [LF, BV, S4])
-
 		def LFBL4 = new SubjectGroup(name: "10% fat + leptin for 4 weeks")
-		def LFBL4es = new SubjectEventGroup(startTime: 0, subjectGroups: [LFBL4], eventGroups: [LF, BL, S4])
-
 		def HFBV4 = new SubjectGroup(name: "45% fat + vehicle for 4 weeks")
-		def HFBV4es = new SubjectEventGroup(startTime: 0, subjectGroups: [HFBV4], eventGroups: [HF, BV, S4])
-
 		def HFBL4 = new SubjectGroup(name: "45% fat + leptin for 4 weeks")
-		def HFBL4es = new SubjectEventGroup(startTime: 0, subjectGroups: [HFBL4], eventGroups: [HF, BL, S4])
+
+        // Add SubjectGroups to study
+        mouseStudy.addToSubjectGroups(LFBV1).addToSubjectGroups(LFBL1).addToSubjectGroups(HFBV1).addToSubjectGroups(HFBL1).addToSubjectGroups(LFBV4).addToSubjectGroups(LFBL4).addToSubjectGroups(HFBV4).addToSubjectGroups(HFBL4).save(failOnError: true)
 
 		// Add subjects and samples and compose SubjectGroups
 		def x = 1
@@ -304,11 +293,52 @@ class ExampleStudies {
             currentSample.save(failOnError:true)
         }
 
-		// Add SubjectGroups to study
-		mouseStudy.addToSubjectGroups(LFBV1).addToSubjectGroups(LFBL1).addToSubjectGroups(HFBV1).addToSubjectGroups(HFBL1).addToSubjectGroups(LFBV4).addToSubjectGroups(LFBL4).addToSubjectGroups(HFBV4).addToSubjectGroups(HFBL4).save(failOnError:true)
+        //Apparently this is needed to prevent strange Hibernate complaints about null or transient objects
+        LFBV1.save(failOnError: true)
+        LFBL1.save(failOnError: true)
+        HFBV1.save(failOnError: true)
+        HFBL1.save(failOnError: true)
+        LFBV4.save(failOnError: true)
+        LFBL4.save(failOnError: true)
+        HFBV4.save(failOnError: true)
+        HFBL4.save(failOnError: true)
 
-		// Add SubjectEventGroups to study
-		mouseStudy.addToSubjectEventGroups(LFBV1es).addToSubjectEventGroups(LFBL1es).addToSubjectEventGroups(HFBV1es).addToSubjectEventGroups(HFBL1es).addToSubjectEventGroups(LFBV4es).addToSubjectEventGroups(LFBL4es).addToSubjectEventGroups(HFBV4es).addToSubjectEventGroups(HFBL4es).save(failOnError:true)
+        // Add SubjectEventGroups to the study, detailing the relation between the subject groups and the event groups
+
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: LFBV1, eventGroup: LF))
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: LFBV1, eventGroup: BV))
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: LFBV1, eventGroup: S1))
+
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: LFBL1, eventGroup: LF))
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: LFBL1, eventGroup: BL))
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: LFBL1, eventGroup: S1))
+
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: HFBV1, eventGroup: HF))
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: HFBV1, eventGroup: BV))
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: HFBV1, eventGroup: S1))
+
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: HFBL1, eventGroup: HF))
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: HFBL1, eventGroup: BL))
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: HFBL1, eventGroup: S1))
+
+
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: LFBV4, eventGroup: LF))
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: LFBV4, eventGroup: BV))
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: LFBV4, eventGroup: S4))
+
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: LFBL4, eventGroup: LF))
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: LFBL4, eventGroup: BL))
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: LFBL4, eventGroup: S4))
+
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: HFBV4, eventGroup: HF))
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: HFBV4, eventGroup: BV))
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: HFBV4, eventGroup: S4))
+
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: HFBL4, eventGroup: HF))
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: HFBL4, eventGroup: BL))
+        mouseStudy.addToSubjectEventGroups(new SubjectEventGroup(startTime: 0, subjectGroup: HFBL4, eventGroup: S4))
+
+        mouseStudy.save(failOnError: true)
 
 		// Add persons and publications to study
 		def studyperson1 = new StudyPerson(person: person1, role: role1)
@@ -359,8 +389,8 @@ class ExampleStudies {
 		humanStudy.addToSubjectGroups rootGroup
 		humanStudy.addToEventGroups rootEventGroup
 
-		// Define subject - event group mapping - straightforward in this case
-		def rootSubjectEventGroup = new SubjectEventGroup(startTime: 0, subjectGroups: [rootGroup], eventGroups: [rootEventGroup])
+        // Define subject - event group mapping - straightforward in this case
+		def rootSubjectEventGroup = new SubjectEventGroup(startTime: 0, subjectGroup: rootGroup, eventGroup: rootEventGroup)
 		humanStudy.addToSubjectEventGroups(rootSubjectEventGroup)
 
 		humanStudy.save(failOnError:true)
