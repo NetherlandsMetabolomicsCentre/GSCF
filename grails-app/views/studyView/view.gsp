@@ -403,6 +403,7 @@
 	    $(document).on('click', '#studyView auditLink, #studyView changed value', function() {
 			// get audit trail element or add
 			// it if it does not yet exist
+            // DUMMY CHANGE!!!
 		    var auditTrail = $('auditTrail');
 		    if (!auditTrail.length) {
 			    var e = document.createElement('auditLog');
