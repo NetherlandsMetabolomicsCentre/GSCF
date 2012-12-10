@@ -60,22 +60,9 @@
 
 	vertical-align: top;
 
-	-moz-border-radius: 0px;
-	border-radius: px;
-	border: 0px;
-}
-
-#studyView elementheader buttonsHeader {
-    display: inline-block;
-    width: 16px;
-    min-height: inherit;
-
-    vertical-align: top;
-
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    border: 1px solid #87cefa;
-    background-color: white;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	border: 1px solid #87cefa;
 }
 
 #studyView elementheader {
