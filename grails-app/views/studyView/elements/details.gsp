@@ -5,4 +5,4 @@
 </g:if>
 <sv:vertical entity="${study}" canRead="${canRead}" canWrite="${canWrite}" />
 
-<auditLink>show audit trail</auditLink>
+<auditLink>[slick this to show audit trail]</auditLink>

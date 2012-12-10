@@ -400,7 +400,7 @@
 
 		<g:if test="${canWrite}">
         // handle auditTrail
-	    $(document).on('click', '#studyView auditLink', function() {
+	    $(document).on('click', '#studyView auditLink, #studyView changed value', function() {
 			// get audit trail element or add
 			// it if it does not yet exist
 		    var auditTrail = $('auditTrail');
@@ -463,7 +463,7 @@
 <div id="studyView">
 	<g:if test="${canWrite}">
 	<changed>
-		<value>0</value>
+        <value>0</value>
 	</changed>
 	</g:if>
 
