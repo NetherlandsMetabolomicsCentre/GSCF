@@ -61,6 +61,9 @@
 						    var e = $(this);
 						    if (e[0] != p[0] || toZero) e.scrollLeft(sl);
 					    });
+
+                        // and make sure the slider is updated
+                        updateSlider(pp, sl);
 				    }
 
 					// remember current scroll position in order of being able to compare
@@ -258,6 +261,9 @@
 				    // 2. force scroll to make sure that scrollLeft is known in the 'scrollin' event
 				    //    handler when we focus
 				    block.scrollLeft(scroll);
+
+                    //    and make sure the slider is updated
+                    updateSlider(block.parent(), scroll);
 			    }
 
 			    // 3. focus the next element and trigger the 'focusin' event handler
@@ -400,36 +406,53 @@
 
                             // if the element is wider then the visible area,
                             // add a scrollbar
-                            var boxWidth = element.width();
-                            var contentRow = $('element', element);
-                            var contentWidth = (contentRow.length > 0) ? contentRow[0].scrollWidth : 0;
-                            if (contentWidth > boxWidth) {
-                                // add a slider element
-                                var sliderWrapper = document.createElement('div');
-                                    sliderWrapper.className = "slider-wrapper ui-widget-content ui-corner-bottom";
-                                var slider = document.createElement('div');
-                                    slider.className = "slider";
-
-                                // append to element
-                                sliderWrapper.appendChild(slider);
-                                element[0].appendChild(sliderWrapper);
-
-                                // and initialize slider
-                                $(slider).slider({
-                                    slide: function( event, ui ) {
-                                        var scroll = ui.value / 100 * (contentWidth - boxWidth);
-                                        $('element, elementHeader', element).each(function() {
-                                            $(this).scrollLeft(scroll);
-                                        });
-                                    }
-                                });
-                            }
+                            addSlider(element);
 
                             // animate to new height
                             element.animate({ height: element.prop('scrollHeight') }, 500);
                         });
 		    });
 	    });
+
+        function addSlider(element) {
+            var boxWidth = element.width();
+            var contentRow = $('element, elementHeader', element);
+            var contentWidth = (contentRow.length > 0) ? contentRow[0].scrollWidth : 0;
+            if (contentWidth > boxWidth) {
+                // add a slider element
+                var sliderWrapper = document.createElement('div');
+                    sliderWrapper.className = "slider-wrapper ui-widget-content ui-corner-bottom";
+                var slider = document.createElement('div');
+                    slider.className = "slider";
+
+                // append to element
+                sliderWrapper.appendChild(slider);
+                element[0].appendChild(sliderWrapper);
+
+                // and initialize slider
+                $(slider).slider({
+                    slide: function( event, ui ) {
+                        var scroll = ui.value / 100 * (contentWidth - boxWidth);
+                        $('element, elementHeader', element).each(function() {
+                            $(this).scrollLeft(scroll);
+                        });
+                    }
+                });
+            }
+        }
+
+        function updateSlider(element, scrollLeft) {
+            var boxWidth = element.width();
+            var contentRow = $('element, elementHeader', element);
+            var contentWidth = (contentRow.length > 0) ? contentRow[0].scrollWidth : 0;
+            var slider = $('.slider', element);
+
+            // resize slider (if applicable)
+            if (contentWidth > boxWidth && slider) {
+                var percentage = Math.round( (scrollLeft / (contentWidth - boxWidth)) * 100);
+                slider.slider("value", percentage);
+            }
+        }
 
 		<g:if test="${canWrite}">
         // handle auditTrail
