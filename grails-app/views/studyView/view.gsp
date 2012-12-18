@@ -92,6 +92,9 @@
 			    } else if (event.type == "focusout" || (event.type == 'change' && (t.attr('type') == 'checkbox' || t.is('select')))) {
 				    if (event.type == "focusout" && t.attr('type') == 'checkbox') return;
 
+                    // unbind special event handlers
+                    t.unbind('change keyup');
+
 				    // stop editting
 				    p.removeClass('editting');
 
@@ -381,20 +384,50 @@
 				        summary: true
 				    }
 			    }).done(function (msg) {
-						    element.removeClass('waitForLoad');
-							element.html(msg);
-						    element.animate({ height: element.prop('scrollHeight') }, 500);
+                            // populate element
+                            element.removeClass('waitForLoad');
+                            element.html(msg);
 
-						    // add tooltips to element headers
-						    $('elementheader > value', element).each(function() {
-							    var t = $(this);
-							    var c = t.attr('comment');
-							    if (c) {
-								    t.addClass('tooltip');
-								    t.tipTip({content:c});
-							    }
-						    });
-				});
+                            // add tooltips to element headers
+                            $('elementheader > value', element).each(function () {
+                                var t = $(this);
+                                var c = t.attr('comment');
+                                if (c) {
+                                    t.addClass('tooltip');
+                                    t.tipTip({content: c});
+                                }
+                            });
+
+                            // if the element is wider then the visible area,
+                            // add a scrollbar
+                            var boxWidth = element.width();
+                            var contentRow = $('element', element);
+                            var contentWidth = (contentRow.length > 0) ? contentRow[0].scrollWidth : 0;
+                            if (contentWidth > boxWidth) {
+                                // add a slider element
+                                var sliderWrapper = document.createElement('div');
+                                    sliderWrapper.className = "slider-wrapper ui-widget-content ui-corner-bottom";
+                                var slider = document.createElement('div');
+                                    slider.className = "slider";
+
+                                // append to element
+                                sliderWrapper.appendChild(slider);
+                                element[0].appendChild(sliderWrapper);
+
+                                // and initialize slider
+                                $(slider).slider({
+                                    slide: function( event, ui ) {
+                                        var scroll = ui.value / 100 * (contentWidth - boxWidth);
+                                        $('element, elementHeader', element).each(function() {
+                                            $(this).scrollLeft(scroll);
+                                        });
+                                    }
+                                });
+                            }
+
+                            // animate to new height
+                            element.animate({ height: element.prop('scrollHeight') }, 500);
+                        });
 		    });
 	    });
 

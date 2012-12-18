@@ -155,6 +155,13 @@
 
 	text-shadow: 0 1px 0px rgba(0, 0, 0, 0.68);
 }
+
+#studyView .sliderwrapper { clear: left; padding: 0 4px 0 2px; margin: 0 -1px -1px -1px; }
+#studyView .sliderwrapper .ui-slider { background: none; border:0; height: 2em; margin: 0 auto;  }
+#studyView .sliderwrapper .ui-handle-helper-parent { position: relative; width: 100%; height: 100%; margin: 0 auto; }
+#studyView .sliderwrapper .ui-slider-handle { top:.2em; height: 1.5em; }
+#studyView .sliderwrapper .ui-slider-handle .ui-icon { margin: -8px auto 0; position: relative; top: 50%; }
+
 /** end :: generics **/
 
 /** begin :: horizontal view **/
