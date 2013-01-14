@@ -58,7 +58,7 @@ class BootStrap {
 		}
 
 		// automatically handle database upgrades
-		DatabaseUpgrade.handleUpgrades(dataSource)
+		DatabaseUpgrade.handleUpgrades(dataSource, grailsApplication)
 
 		// developmental/test/demo bootstrapping:
 		//      - templates
@@ -74,11 +74,11 @@ class BootStrap {
 			if (!Template.count()) ExampleTemplates.initTemplates()
 
 			// add data required for the webtests?
-			if (grails.util.GrailsUtil.environment == GrailsApplication.ENV_TEST) ExampleStudies.addTestData()
+//			if (grails.util.GrailsUtil.environment == GrailsApplication.ENV_TEST) ExampleStudies.addTestData()
 
 			// add example studies?
-			if (!Study.count() && grails.util.GrailsUtil.environment == GrailsApplication.ENV_DEVELOPMENT)
-				ExampleStudies.addExampleStudies(SecUser.findByUsername('user'), SecUser.findByUsername('admin'))
+//			if (!Study.count() && grails.util.GrailsUtil.environment == GrailsApplication.ENV_DEVELOPMENT)
+//				ExampleStudies.addExampleStudies(SecUser.findByUsername('user'), SecUser.findByUsername('admin'))
 		}
 
 		/**
