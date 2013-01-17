@@ -13,12 +13,28 @@ import dbnp.generic.Audit
 
 class StudyViewService {
     static transactional = true
-	def authenticationService
 
+    // inject the authentication service
+    def authenticationService
+
+    /**
+     * fetch study for the currently logged in user, or create a
+     * new study if the study does not exist
+     * @param id
+     * @return Study
+     */
     def fetchStudyForCurrentUserWithId(long id) {
 	    SecUser user = authenticationService.getLoggedInUser()
 	    return fetchStudyWithIdAndUser(id, user)
     }
+
+    /**
+     * fetch the study for a particular user, or create a new study
+     * if it does not yet exists
+     * @param id
+     * @param user
+     * @return Study
+     */
 	def fetchStudyWithIdAndUser(long id, SecUser user) {
 	    Study study
 	    def criteria = Study.createCriteria()
@@ -48,6 +64,8 @@ class StudyViewService {
 			    study = (studies.size()>0) ? studies.first() : null
 		    }
 	    } else if (user == null && id > 0) {
+            // nobody is logged in, check to see if this is
+            // a public study which may be viewed by the world
 		    List studies = criteria.list {
 			    and {
 				    eq("id", id)
@@ -90,11 +108,24 @@ class StudyViewService {
 		return study
     }
 
+    /**
+     * shortcut method to fetchStudyForCurrentUserWithId
+     * @param params
+     * @return
+     */
 	def fetchStudy(params) {
 		Long id = (params.containsKey('id') && (params.get('id').toLong()) > 0) ? params.get('id').toLong() : 0
 		return fetchStudyForCurrentUserWithId(id)
 	}
 
+    /**
+     * wrapper method to perform some common checks and validations. It
+     * accepts a closure to perform some specific logic
+     * @param response
+     * @param params
+     * @param block
+     * @return
+     */
 	def wrap(response, params,Closure block) {
 		Long id = (params.containsKey('id') && (params.get('id').toLong()) > 0) ? params.get('id').toLong() : 0
 
@@ -115,6 +146,11 @@ class StudyViewService {
 		}
 	}
 
+    /**
+     * returns a list of terms for a set of ontologies. Used by taglib
+     * @param ontologies
+     * @return
+     */
 	def termsForOntologies(HashSet ontologies) {
 		def terms = []
 		ontologies.each { ontology ->
@@ -124,6 +160,14 @@ class StudyViewService {
 		return terms.sort{ it.name }
 	}
 
+    /**
+     * add a record to the audit trail of a study to keep track of changes
+     * @param entity
+     * @param fieldType
+     * @param fieldName
+     * @param fieldValue
+     * @return
+     */
 	def addToAuditTrail(entity, String fieldType, String fieldName, fieldValue) {
 		SecUser user = authenticationService.getLoggedInUser()
 		Study study
