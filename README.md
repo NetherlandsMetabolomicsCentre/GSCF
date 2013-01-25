@@ -1,18 +1,24 @@
 Generic Study Capture Framework
 ====
 
-For instructions to set up a development environment, see http://phenotypefoundation.github.com/GSCF
+## Continuous Integration Build status
+### GSCF
 
-To set up a production environment, see [INSTALLATION.md](INSTALLATION.md).
+![build status](http://old.jenkins.dbnp.org/jenkins/job/ci-gscf/badge/icon)
 
-Or for the really impatient, download Java 1.6 or higher, Grails 2.1.1 or higher and use (UNIX syntax):
-```
-export JAVA_HOME=...
-export GRAILS_HOME=...
-export PATH=$PATH:$JAVA_HOME/bin:$GRAILS_HOME/bin
-export JAVA_OPTS="-Xms32m -Xmx512m -XX:MaxPermSize=750m -XX:MaxHeapFreeRatio=70 -XX:MaxGCPauseMillis=10 -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled"
-grails help #trigger plugin downloads
-grails clean #necessary to trigger GDT AST transformations
-grails compile
-grails run-app
-```
+### SAM
+
+![build status](http://old.jenkins.dbnp.org/jenkins/job/ci-sam/badge/icon)
+
+### metabolomicsModule
+
+![build status](http://old.jenkins.dbnp.org/jenkins/job/ci-metabolomicsModule/badge/icon)
+
+### grails-uploadr plugin
+
+![build status](http://jenkins.osx.eu/job/ci-uploadr/badge/icon)
+
+### GSCF - Events refactoring branch
+
+![build status](http://old.jenkins.dbnp.org/jenkins/job/ci2-gscf/badge/icon)
+
