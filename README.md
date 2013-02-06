@@ -4,14 +4,24 @@ Generic Study Capture Framework
 ## Download a war file
 We have a couple of ```war``` files available that can be deployed on an application container (e.g. Apache Tomcat).  
 
-What | War file | Grails environment | Configuration file
---- | --- | --- | --- | ---
-Latest Production Build | [gscf.war](http://download.dbnp.org/production/gscf.war) | ```production``` | _~/.gscf/production.properties_
-Latest Test Build | [gscf.war](http://download.dbnp.org/dbnptest/gscf.war) | ```dbnptest``` | _~/.gscf/dbnptest.properties_
-Continuous Integration ([HEAD](https://github.com/PhenotypeFoundation/GSCF)) | [gscf.war](http://download.dbnp.org/ci/gscf.war) | ```ci``` | _~/.gscf/ci.properties_
-Continuous Integration ([Events Refactoring Branch](https://github.com/PhenotypeFoundation/GSCF/tree/events_refactoring)) | [gscf.war](http://download.dbnp.org/ci2/gscf.war) | ```ci2``` | _~/.gscf/ci2.properties_
+War file | Build Environment | Build Status | Source | Config Location
+--- | --- | --- | --- | --- | ---
+[gscf.war](http://download.dbnp.org/production/gscf.war) | ```production``` | ![configuration file: ~/.gscf/production.properties](http://jenkins.dbnp.org/job/production-gscf/badge/icon) | [![github logo](https://raw.github.com/PhenotypeFoundation/GSCF/master/web-app/images/github-logo.png)](https://github.com/PhenotypeFoundation/GSCF) | ~/.gscf/production.properties [?](https://github.com/PhenotypeFoundation/GSCF/blob/master/grails-app/conf/default.properties)
+[metabolomicsModule](http://download.dbnp.org/production/metabolomicsModule.war) | ```production``` | ![configuration file: ~/.metabolomicsModule/production.properties](http://jenkins.dbnp.org/job/production-metabolomicsModule/badge/icon) | [![github logo](https://raw.github.com/PhenotypeFoundation/GSCF/master/web-app/images/github-logo.png)](https://github.com/PhenotypeFoundation/metabolomicsModule) | ~/.metabolomicsModule/production.properties [?](https://github.com/PhenotypeFoundation/metabolomicsModule/blob/master/grails-app/conf/default.properties)
+[SAM](http://download.dbnp.org/production/sam.war) | ```production``` | ![configuration file: ~/.dbxp/production-sam.properties](http://jenkins.dbnp.org/job/production-sam/badge/icon) | [![github logo](https://raw.github.com/PhenotypeFoundation/GSCF/master/web-app/images/github-logo.png)](https://github.com/TheHyve/SAM) | ~/.dbxp/production-sam.properties [?](https://github.com/thehyve/SAM/blob/master/grails-app/conf/default.properties)
+~~[questionnaireModule.war](http://download.dbnp.org/production/questionnaireModule.war)~~ | ~~```production```~~ | ![configuration file: ~/.dbxp/production-questionnaireModule.properties](http://jenkins.dbnp.org/job/production-questionnaireModule/badge/icon) | [![github logo](https://raw.github.com/PhenotypeFoundation/GSCF/master/web-app/images/github-logo.png)](https://github.com/TNO/QuestionnaireModule) | ~/.dbxp/production-questionnaireModule.properties [?](https://github.com/TNO/QuestionnaireModule/blob/master/grails-app/conf/default.properties)
+[gscf.war](http://download.dbnp.org/dbnptest/gscf.war) | ```dbnptest``` | ![configuration file: ~/.gscf/dbnptest.properties](http://old.jenkins.dbnp.org/jenkins/job/test-gscf/badge/icon) | [![github logo](https://raw.github.com/PhenotypeFoundation/GSCF/master/web-app/images/github-logo.png)](https://github.com/PhenotypeFoundation/GSCF) | ~/.gscf/dbnptest.properties [?](https://github.com/PhenotypeFoundation/GSCF/blob/master/grails-app/conf/default.properties)
+[gscf.war](http://download.dbnp.org/ci/gscf.war) | ```ci``` | ![configuration file: ~/.gscf/ci.properties](http://old.jenkins.dbnp.org/jenkins/job/ci-gscf/badge/icon) | [![github logo](https://raw.github.com/PhenotypeFoundation/GSCF/master/web-app/images/github-logo.png)](https://github.com/PhenotypeFoundation/GSCF) | ~/.gscf/ci.properties [?](https://github.com/PhenotypeFoundation/GSCF/blob/master/grails-app/conf/default.properties)
+[metabolomicsModule.war](http://download.dbnp.org//ci/metabolomicsModule.war) | ```ci``` | ![configuration file: ~/.metabolomicsModule/ci.properties](http://old.jenkins.dbnp.org/jenkins/job/ci-metabolomicsModule/badge/icon) | [![github logo](https://raw.github.com/PhenotypeFoundation/GSCF/master/web-app/images/github-logo.png)](https://github.com/PhenotypeFoundation/metabolomicsModule) | ~/.metabolomicsModule/ci.properties [?](https://github.com/PhenotypeFoundation/metabolomicsModule/blob/master/grails-app/conf/default.properties)
+[sam.war](http://download.dbnp.org//ci/sam.war) | ```ci``` | ![configuration file: ~/.dbxp/production-sam.properties](http://old.jenkins.dbnp.org/jenkins/job/ci-sam/badge/icon) | [![github logo](https://raw.github.com/PhenotypeFoundation/GSCF/master/web-app/images/github-logo.png)](https://github.com/TheHyve/SAM) | ~/.dbxp/production-sam.properties [?](https://github.com/thehyve/SAM/blob/master/grails-app/conf/default.properties)
+[gscf.war](http://download.dbnp.org/ci2/gscf.war) | ```ci2``` | ![configuration file: ~/.gscf/ci2.properties](http://old.jenkins.dbnp.org/jenkins/job/ci2-gscf/badge/icon) | [![github logo](https://raw.github.com/PhenotypeFoundation/GSCF/master/web-app/images/github-logo.png)](https://github.com/PhenotypeFoundation/GSCF/tree/events_refactoring) | ~/.gscf/ci2.properties [?](https://github.com/PhenotypeFoundation/GSCF/blob/events_refactoring/grails-app/conf/default.properties)
+uploadr plugin | ```ci``` | ![build status](http://jenkins.osx.eu/job/ci-uploadr/badge/icon) | [![github logo](https://raw.github.com/PhenotypeFoundation/GSCF/master/web-app/images/github-logo.png)](https://github.com/4np/grails-uploadr/) | n/a ([documentation](https://github.com/4np/grails-uploadr/blob/master/README.md))
+
+_Note: each project / environment requires a specific configuration file._
 
 ## Configuration file
+In order to run each of the war files, they need to be configured properly. You can do so by adding a configuration file at the configuration path for the specific war file (note that ~ is the home dir of the user running the tomcat server, in most cases this is user _tomcat_ or _tomcat7_).
+
 Example configuration file (e.g. ~/.gscf/ci.properties where ~ is de homedir of the user running Tomcat - generally user tomcat or tomcat7):
 
 ```groovy
@@ -30,25 +40,4 @@ application.title=GSCF CI
 
 _Note the PostgreSQL database configuration_
 
-
-## Continuous Integration Build status
-### GSCF
-
-![build status](http://old.jenkins.dbnp.org/jenkins/job/ci-gscf/badge/icon)
-
-### SAM
-
-![build status](http://old.jenkins.dbnp.org/jenkins/job/ci-sam/badge/icon)
-
-### metabolomicsModule
-
-![build status](http://old.jenkins.dbnp.org/jenkins/job/ci-metabolomicsModule/badge/icon)
-
-### grails-uploadr plugin
-
-![build status](http://jenkins.osx.eu/job/ci-uploadr/badge/icon)
-
-### GSCF - events_refactoring branch
-
-![build status](http://old.jenkins.dbnp.org/jenkins/job/ci2-gscf/badge/icon)
 
